@@ -1,1 +1,48 @@
-{"observed_at": 1785535554, "age_seconds": 7, "rpc_agreement": true, "providers_ok": 4, "providers_total": 4, "observations": [{"provider": "quicknode", "block": 25655721, "block_hash": "0xdf051f0bcf9afa4f104573361b6fe2173ff8faf760c1c563fa6a7e2dec0e1777", "timestamp": 1785535547, "weth_reserve": "507.257324854084334818", "token_reserve": "13922689798.508155218", "gas_gwei": "0.084929123", "latency_ms": 527}, {"provider": "ankr", "block": 25655721, "block_hash": "0xdf051f0bcf9afa4f104573361b6fe2173ff8faf760c1c563fa6a7e2dec0e1777", "timestamp": 1785535547, "weth_reserve": "507.257324854084334818", "token_reserve": "13922689798.508155218", "gas_gwei": "0.084743948", "latency_ms": 594}, {"provider": "infura", "block": 25655721, "block_hash": "0xdf051f0bcf9afa4f104573361b6fe2173ff8faf760c1c563fa6a7e2dec0e1777", "timestamp": 1785535547, "weth_reserve": "507.257324854084334818", "token_reserve": "13922689798.508155218", "gas_gwei": "0.084929123", "latency_ms": 596}, {"provider": "alchemy", "block": 25655721, "block_hash": "0xdf051f0bcf9afa4f104573361b6fe2173ff8faf760c1c563fa6a7e2dec0e1777", "timestamp": 1785535547, "weth_reserve": "507.257324854084334818", "token_reserve": "13922689798.508155218", "gas_gwei": "0.084743948", "latency_ms": 859}], "errors": [], "state": {"block": 25655721, "timestamp": 1785535547, "token_reserve": "13922689798.508155218", "weth_reserve": "507.257324854084334818", "eth_usd": "1860.631863152223929341780821", "fee_bps": 30, "confidence": "observed", "source": "multi-RPC eth_call getReserves + DEX Screener pair price"}, "dex": {"price_usd": "0.00006779", "liquidity_usd": "1887796.69", "volume_24h_usd": "5827717.22", "change_24h_pct": "26.98"}}
+{
+  "observed_at": 1785535944,
+  "age_seconds": 13,
+  "rpc_agreement": false,
+  "providers_ok": 1,
+  "providers_total": 4,
+  "observations": [
+    {
+      "provider": "publicnode",
+      "block": 25655753,
+      "block_hash": "0xac1fdc32737cdfd0f9d610cd5fd30d8bbc81c2aed7a50315dab29b24db31cfef",
+      "timestamp": 1785535931,
+      "weth_reserve": "505.751845695907377909",
+      "token_reserve": "13964456716.525686845",
+      "gas_gwei": "0.079449449",
+      "latency_ms": 463
+    }
+  ],
+  "errors": [
+    {
+      "provider": "llamarpc",
+      "error": "HTTPError"
+    },
+    {
+      "provider": "cloudflare",
+      "error": "RuntimeError"
+    },
+    {
+      "provider": "1rpc",
+      "error": "RuntimeError"
+    }
+  ],
+  "state": {
+    "block_number": 25655753,
+    "timestamp": 1785535931,
+    "token_reserve": "13964456716.525686845",
+    "weth_reserve": "505.751845695907377909",
+    "eth_usd": "1862.104842477914880382379571",
+    "confidence": "invalid",
+    "source": "scheduled public multi-RPC getReserves + DEX Screener"
+  },
+  "dex": {
+    "price_usd": "0.00006744",
+    "liquidity_usd": "1883638.81",
+    "volume_24h_usd": "5833065.35",
+    "change_24h_pct": "26.1"
+  }
+}
