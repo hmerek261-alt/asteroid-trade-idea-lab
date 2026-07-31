@@ -122,9 +122,9 @@ canvas#spark{display:block;width:100%;height:90px}
 .plan-card{background:#090e18;border:1px solid var(--line);border-radius:9px;padding:12px}
 .plan-card.cons{border-color:#0e3044}.plan-card.bal{border-color:#102060}.plan-card.agg{border-color:#28104a}
 /* Portfolio */
-.port-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.port-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .port-card{background:#090e18;border:1px solid var(--line);border-radius:9px;padding:13px}
-.port-card.hold{border-color:#1c2b3a}.port-card.p50{border-color:#0e3044}.port-card.p70{border-color:#28104a}
+.port-card.hold{border-color:#1c2b3a}.port-card.p50{border-color:#0e3044}.port-card.p70{border-color:#28104a}.port-card.aggressive{border-color:#7a3010}
 /* Position controls */
 .ctrl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
 .ctrl-field{display:flex;flex-direction:column;gap:3px}
@@ -389,6 +389,34 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
     <div class="row"><span class="row-key">Trades (paper)</span><span class="row-val">0</span></div>
     <div class="row"><span class="row-key">vs Hold</span><span class="row-val" id="p70vsHold">Waiting for first trade</span></div>
    </div>
+   <div class="port-card aggressive">
+    <div class="lbl">Aggressive Pump Recycler <span class="est">PAPER</span></div>
+    <div class="row"><span class="row-key">Engine state</span><span class="row-val" id="agState">Loading…</span></div>
+    <div class="row"><span class="row-key">Tokens held</span><span class="row-val" id="agTokens">—</span></div>
+    <div class="row"><span class="row-key">Cash reserve</span><span class="row-val" id="agCash">—</span></div>
+    <div class="row"><span class="row-key">Equity</span><span class="row-val" id="agEquity">—</span></div>
+    <div class="row"><span class="row-key">vs Hold</span><span class="row-val" id="agVsHold">—</span></div>
+    <div class="row"><span class="row-key">Extra tokens</span><span class="row-val" id="agExtra">—</span></div>
+    <div class="row"><span class="row-key">Actions / cycles</span><span class="row-val" id="agActions">—</span></div>
+    <div class="row"><span class="row-key">Gas + fees</span><span class="row-val" id="agCosts">—</span></div>
+    <div class="row"><span class="row-key">Last evaluation</span><span class="row-val" id="agUpdated">—</span></div>
+    <div style="margin-top:8px;font-size:10px;color:var(--muted)">Evaluated every 5 minutes by GitHub. No signer or execution path.</div>
+   </div>
+  </div>
+  <div class="grid" style="margin-top:10px">
+   <article class="card s5">
+    <div class="lbl">Active Cycle / Risk Gates</div>
+    <div id="agCycle" style="font-size:11px;color:var(--muted);line-height:1.7">Loading…</div>
+   </article>
+   <article class="card s7">
+    <div class="lbl">Missed Opportunity Review</div>
+    <div id="missedReview" style="font-size:11px;color:var(--muted);line-height:1.7">Loading…</div>
+   </article>
+   <article class="card s12">
+    <div class="lbl">Aggressive Paper Ledger — most recent actions</div>
+    <table><thead><tr><th class="th">Time</th><th class="th">Side</th><th class="th">Tokens</th><th class="th">Cash</th><th class="th">Fill</th><th class="th">Gas</th><th class="th">Impact</th><th class="th">Reason</th></tr></thead>
+    <tbody id="agLedger"><tr><td class="td" colspan="8" style="color:var(--muted)">No paper actions yet.</td></tr></tbody></table>
+   </article>
   </div>
   <div class="warn" style="margin-top:10px">Pool reserves for the 2-month window are fully reconstructed (138,226 Sync events, 100% coverage). Still missing: ETH/USD per swap, gas receipts per block, and price impact at execution time. All simulation results are estimated.</div>
  </section>
@@ -598,7 +626,8 @@ window.fetch = (input, init) => {
   '/api/quote':'data/quote.json',
   '/api/signal_stats':'data/signal_stats.json',
   '/api/evidence':'data/evidence.json',
-  '/api/bag-comparison':'data/bag_comparison.json'
+  '/api/bag-comparison':'data/bag_comparison.json',
+  '/api/paper':'data/paper_trader.json'
  };
  return browserFetch(map[path] || raw, init);
 };
@@ -664,6 +693,40 @@ async function fetchPlan(){
   try{const r2=await fetch('/api/cached_plan');if(r2.ok){D=await r2.json();if(!D.error){renderAll(D);setConn('offline');return;}}}catch(_){}
   setConn('offline');
  }finally{hide('lo');}
+}
+
+async function fetchPaper(){
+ try{
+  const r=await fetch('/api/paper',{signal:AbortSignal.timeout(8000)});
+  if(!r.ok)throw new Error(r.status);
+  renderPaper(await r.json());
+ }catch(e){
+  document.getElementById('agState').textContent='UNAVAILABLE';
+  document.getElementById('agCycle').textContent='Paper state has not been published yet.';
+ }
+}
+
+function renderPaper(p){
+ const n=v=>Number(v||0),usd=v=>'$'+n(v).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+ const tok=v=>Math.round(n(v)).toLocaleString(),pct=v=>(n(v)>=0?'+':'')+n(v).toFixed(2)+'%';
+ const state=p.state||'SCANNING';
+ const st=document.getElementById('agState');st.textContent=state;
+ st.style.color=state==='PAUSED_BY_RISK'?'var(--red)':state==='SCANNING'?'var(--blue)':'var(--amber)';
+ document.getElementById('agTokens').textContent=tok(p.tokens);
+ document.getElementById('agCash').textContent=usd(p.cash_usd);
+ document.getElementById('agEquity').textContent=usd(p.equity_usd);
+ const vh=document.getElementById('agVsHold');vh.textContent=usd(p.vs_hold_usd);vh.style.color=n(p.vs_hold_usd)>=0?'var(--mint)':'var(--red)';
+ const ex=document.getElementById('agExtra');ex.textContent=(n(p.extra_tokens)>=0?'+':'')+tok(p.extra_tokens);ex.style.color=n(p.extra_tokens)>=0?'var(--mint)':'var(--red)';
+ document.getElementById('agActions').textContent=(p.actions||0)+' / '+(p.completed_cycles||0);
+ document.getElementById('agCosts').textContent=usd(n(p.gas_paid_usd)+n(p.fees_paid_usd));
+ document.getElementById('agUpdated').textContent=p.updated_at?new Date(p.updated_at).toLocaleString():'—';
+ const levels=(p.buyback_levels||[]).map(x=>`${x.filled?'✓':'○'} -${(n(x.drop_pct)*100).toFixed(0)}% @ $${n(x.trigger_price).toFixed(8)}`).join('<br>');
+ const blockers=(p.blockers||[]).length?(p.blockers||[]).map(x=>'⚠ '+x.replaceAll('_',' ')).join('<br>'):'✓ All current risk gates clear';
+ document.getElementById('agCycle').innerHTML=`<b>State:</b> ${state}<br><b>Core floor:</b> ${tok(p.core_floor_tokens)} tokens<br><b>Average sell:</b> ${n(p.average_sell_price)>0?'$'+n(p.average_sell_price).toFixed(8):'—'}<br>${levels||'<b>Buybacks:</b> none open'}<br><br>${blockers}`;
+ const m=p.missed_opportunity||{};
+ document.getElementById('missedReview').innerHTML=`<b>Session high:</b> $${n(m.session_high).toFixed(8)}<br><b>Low after high:</b> $${n(m.session_low_after_high).toFixed(8)}<br><b>Maximum retracement:</b> ${pct(m.maximum_retracement_pct)}<br><b>Pump detected:</b> ${m.pump_detected?'YES':'NO'}<br><b>Sell armed:</b> ${m.sell_signal_armed?'YES':'NO'}<br><b>Primary blocker:</b> ${(m.primary_blocker||'none').replaceAll('_',' ')}<br><b>Classification:</b> ${m.classification||'MONITORING'}`;
+ const ledger=(p.ledger||[]).slice().reverse().slice(0,20);
+ document.getElementById('agLedger').innerHTML=ledger.length?ledger.map(x=>`<tr><td class="td">${new Date(x.fill_time).toLocaleString()}</td><td class="td" style="color:${x.side==='SELL'?'var(--red)':'var(--mint)'}">${x.side}</td><td class="td">${tok(x.tokens)}</td><td class="td">${usd(x.cash_usd)}</td><td class="td">$${n(x.simulated_fill_price).toFixed(8)}</td><td class="td">${usd(x.gas_usd)}</td><td class="td">${n(x.price_impact_bps).toFixed(1)} bps</td><td class="td">${(x.reason||[]).join(', ')}</td></tr>`).join(''):'<tr><td class="td" colspan="8" style="color:var(--muted)">No qualified paper actions yet. The engine is observing and preserving its state.</td></tr>';
 }
 
 function renderAll(d){
@@ -1027,27 +1090,21 @@ function dClass(d){
  if(d.includes('SELL'))return'dec dec-sell';if(d.includes('BUY'))return'dec dec-buy';return'dec dec-no';
 }
 function renderCmds(){
- document.getElementById('cmdBlock').textContent=`# Start server (read-only, port 8765)
-cd /Users/haz/Desktop/H20
-python3 -m asteroid_scalper.server
+ document.getElementById('cmdBlock').textContent=`ONLINE RESEARCH MODE
 
-# Fetch full analysis (TV + on-chain, ~30s)
-curl http://127.0.0.1:8765/api/trade_plan
+Market snapshot: refreshed by GitHub every 5 minutes
+Paper evaluator: persistent Aggressive Pump Recycler v1
+Ledger: saved after every qualified virtual action
+Portfolio comparison: Aggressive vs Buy-and-Hold
 
-# Quick live pool check
-curl http://127.0.0.1:8765/api/live
+SAFETY BOUNDARY
+No wallet signer
+No private key
+No transaction builder
+No broadcast or execution adapter
 
-# Calibrated signal stats (689-day history)
-curl http://127.0.0.1:8765/api/signal_stats
-
-# Cached plan (instant)
-curl http://127.0.0.1:8765/api/cached_plan
-
-# Round-trip cost calculator
-curl "http://127.0.0.1:8765/api/quote?size=500&gas=20"
-
-# Stop server
-kill $(lsof -ti:8765)`;
+GitHub schedules can be delayed. This is five-minute paper research,
+not a sub-minute trading system and not a promise of executable fills.`;
 }
 // Nav
 document.querySelectorAll('[data-page]').forEach(a=>{
@@ -1062,7 +1119,7 @@ function show(id){document.getElementById(id).style.display='flex';}
 function hide(id){document.getElementById(id).style.display='none';}
 // Boot
 (async()=>{
- await fetchLive();
+ await Promise.all([fetchLive(),fetchPaper()]);
  try{const r=await fetch('/api/cached_plan');if(r.ok){const d=await r.json();if(!d.error){D=d;renderAll(d);return;}}}catch(_){}
  fetchPlan();
 })();
