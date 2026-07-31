@@ -1,0 +1,27 @@
+name: Refresh public market snapshot
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install certificate bundle
+        run: python3 -m pip install --quiet certifi
+      - name: Refresh ASTEROID market data
+        run: python3 scripts/refresh_public_snapshot.py
+      - name: Publish changed snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/live.json docs/data/heartbeat.json
+          git diff --cached --quiet || git commit -m "Refresh ASTEROID market snapshot"
+          git push
