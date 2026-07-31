@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.env
+.env.*
+local_keys.py
+rpc_keys.py
+*.log
+*.pid
+*secret*
+
