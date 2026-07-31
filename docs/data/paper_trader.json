@@ -5,7 +5,7 @@
   "evaluation_interval_minutes": 5,
   "state": "SCANNING",
   "started_at": "2026-07-31T22:12:24Z",
-  "updated_at": "2026-07-31T22:12:24Z",
+  "updated_at": "2026-07-31T22:23:14Z",
   "tokens": "74683073",
   "cash_usd": "0",
   "core_floor_tokens": "37341536.50",
@@ -32,6 +32,11 @@
       "ts": 1785535944,
       "price": "0.00006744",
       "liquidity_usd": "1883638.81"
+    },
+    {
+      "ts": 1785536594,
+      "price": "0.00006872",
+      "liquidity_usd": "1901622.82"
     }
   ],
   "ledger": [],
@@ -39,8 +44,8 @@
     "rpc_disagreement_or_fallback"
   ],
   "missed_opportunity": {
-    "session_high": "0.00006744",
-    "session_low_after_high": "0.00006744",
+    "session_high": "0.00006872",
+    "session_low_after_high": "0.00006872",
     "maximum_retracement_pct": "0",
     "pump_detected": false,
     "sell_signal_armed": false,
@@ -48,9 +53,9 @@
     "classification": "MONITORING"
   },
   "market": {
-    "price_usd": "0.00006744",
-    "liquidity_usd": "1883638.81",
-    "gas_usd": "0.02219148055726531978729214493372095685000",
+    "price_usd": "0.00006872",
+    "liquidity_usd": "1901622.82",
+    "gas_usd": "0.02123640228288732193046499090465808500000",
     "returns": {
       "20m": null,
       "1h": null,
@@ -60,7 +65,7 @@
     },
     "rpc_agreement": false
   },
-  "equity_usd": "5036.62644312",
-  "hold_equity_usd": "5036.62644312",
+  "equity_usd": "5132.22077656",
+  "hold_equity_usd": "5132.22077656",
   "vs_hold_usd": "0E-8"
 }
