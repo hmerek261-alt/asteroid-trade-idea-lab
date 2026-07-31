@@ -1,19 +1,29 @@
 {
-  "observed_at": 1785535944,
-  "age_seconds": 13,
+  "observed_at": 1785536044,
+  "age_seconds": 17,
   "rpc_agreement": false,
-  "providers_ok": 1,
+  "providers_ok": 2,
   "providers_total": 4,
   "observations": [
     {
       "provider": "publicnode",
-      "block": 25655753,
-      "block_hash": "0xac1fdc32737cdfd0f9d610cd5fd30d8bbc81c2aed7a50315dab29b24db31cfef",
-      "timestamp": 1785535931,
+      "block": 25655761,
+      "block_hash": "0xd00f106e8bf54aadcc9ee28bbc431a719dda5fe0bd92626b2202467c73ff3130",
+      "timestamp": 1785536027,
       "weth_reserve": "505.751845695907377909",
       "token_reserve": "13964456716.525686845",
-      "gas_gwei": "0.079449449",
-      "latency_ms": 463
+      "gas_gwei": "0.097523806",
+      "latency_ms": 1091
+    },
+    {
+      "provider": "1rpc",
+      "block": 25655761,
+      "block_hash": "0xd00f106e8bf54aadcc9ee28bbc431a719dda5fe0bd92626b2202467c73ff3130",
+      "timestamp": 1785536027,
+      "weth_reserve": "505.751845695907377909",
+      "token_reserve": "13964456716.525686845",
+      "gas_gwei": "0.097523806",
+      "latency_ms": 1788
     }
   ],
   "errors": [
@@ -24,15 +34,11 @@
     {
       "provider": "cloudflare",
       "error": "RuntimeError"
-    },
-    {
-      "provider": "1rpc",
-      "error": "RuntimeError"
     }
   ],
   "state": {
-    "block_number": 25655753,
-    "timestamp": 1785535931,
+    "block_number": 25655761,
+    "timestamp": 1785536027,
     "token_reserve": "13964456716.525686845",
     "weth_reserve": "505.751845695907377909",
     "eth_usd": "1862.104842477914880382379571",
@@ -42,7 +48,7 @@
   "dex": {
     "price_usd": "0.00006744",
     "liquidity_usd": "1883638.81",
-    "volume_24h_usd": "5833065.35",
-    "change_24h_pct": "26.1"
+    "volume_24h_usd": "5832536.31",
+    "change_24h_pct": "26.06"
   }
 }
