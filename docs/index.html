@@ -1,0 +1,1071 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ASTEROID Trade Planning Terminal</title>
+<style>
+:root{color-scheme:dark;--bg:#060810;--panel:#0c1220;--line:#1c2b40;--text:#e8f0ff;--muted:#6b7d96;--mint:#3ecfa0;--red:#f05569;--amber:#f5c843;--blue:#5b9cf6;--purple:#9d72f5;--orange:#f0884a}
+*{box-sizing:border-box;margin:0;padding:0}body{background:var(--bg);font:12.5px/1.5 'Inter',ui-sans-serif,system-ui;color:var(--text)}
+.shell{display:grid;grid-template-columns:188px 1fr;min-height:100vh}
+aside{border-right:1px solid var(--line);padding:16px 10px;position:sticky;top:0;height:100vh;overflow-y:auto;background:#070a14;display:flex;flex-direction:column;gap:3px}
+.brand{font-weight:900;font-size:14px;padding:0 6px 14px;line-height:1.3}.brand small{display:block;color:var(--mint);font-size:9px;letter-spacing:.18em;margin-top:2px}
+.nav a{display:block;color:var(--muted);text-decoration:none;padding:7px 9px;border-radius:6px;font-size:12px;cursor:pointer}
+.nav a.active,.nav a:hover{background:#121e30;color:#fff}
+.nav-section{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;padding:10px 9px 4px;opacity:.6}
+.exec-off{margin-top:auto;border:1px solid #5c3a14;color:var(--amber);padding:8px 9px;border-radius:7px;font-size:10px;line-height:1.6}
+main{padding:18px 22px;max-width:1520px;width:100%;margin:auto}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px;flex-wrap:wrap}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar h1{font-size:16px;font-weight:800}
+.conn{display:flex;align-items:center;gap:6px;padding:5px 11px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.04em}
+.conn-live{background:#0d2e1e;border:1px solid #1a5c3a;color:var(--mint)}
+.conn-degraded{background:#2e1e0d;border:1px solid #5c3a1a;color:var(--amber)}
+.conn-offline{background:#2e0d0d;border:1px solid #5c1a1a;color:var(--red)}
+.conn-dot{width:7px;height:7px;border-radius:50%;background:currentColor;animation:blink 1.4s ease-in-out infinite}
+.conn-offline .conn-dot{animation:none}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.pills{display:flex;gap:5px}
+.pill{border:1px solid var(--line);border-radius:99px;padding:3px 8px;font-size:10px;letter-spacing:.06em}
+.pill.red{border-color:#5c1a20;color:var(--red)}.pill.amber{border-color:#5c4200;color:var(--amber)}
+.page{display:none}.page.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px;margin-bottom:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px}
+.s12{grid-column:span 12}.s9{grid-column:span 9}.s8{grid-column:span 8}.s7{grid-column:span 7}.s6{grid-column:span 6}.s5{grid-column:span 5}.s4{grid-column:span 4}.s3{grid-column:span 3}.s2{grid-column:span 2}
+.lbl{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.11em;margin-bottom:8px}
+.big{font-size:22px;font-weight:800;line-height:1.1}.sub{font-size:11px;color:var(--muted);margin-top:3px}
+/* Decision badge */
+.dec{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:8px;font-size:16px;font-weight:900;letter-spacing:.03em;margin-bottom:4px}
+.dec-no{background:#1c0a0d;color:var(--red);border:1px solid #4a1520}
+.dec-wait{background:#1c1400;color:var(--amber);border:1px solid #4a3800}
+.dec-sell{background:#1c0e00;color:var(--orange);border:1px solid #4a2c00}
+.dec-buy{background:#001c10;color:var(--mint);border:1px solid #004a2a}
+.regime-tag{display:inline-block;background:#160d2e;border:1px solid #3a1e7c;color:var(--purple);padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;margin:4px 8px 6px 0}
+/* Confidence labels */
+.obs{color:var(--mint);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.est{color:var(--amber);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.inf{color:var(--blue);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.unk{color:var(--muted);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+/* Rows */
+.row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #14202e;font-size:11.5px}
+.row:last-child{border:0}.row-key{color:var(--muted)}.row-val{text-align:right;font-weight:500}
+.row-val.pos{color:var(--mint)}.row-val.neg{color:var(--red)}.row-val.amb{color:var(--amber)}
+/* TODAY'S IDEA CARD */
+.idea-card{background:linear-gradient(135deg,#0c1628,#111a2e);border:1px solid #2a4060;border-radius:12px;padding:16px 18px;margin-bottom:12px;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:start}
+.idea-badge{padding:8px 16px;border-radius:8px;font-size:18px;font-weight:900;letter-spacing:.02em;white-space:nowrap}
+.idea-badge.no{background:#1c0a0d;color:var(--red);border:1px solid #4a1520}
+.idea-badge.wait{background:#1c1400;color:var(--amber);border:1px solid #4a3800}
+.idea-badge.sell{background:#1c0e00;color:var(--orange);border:1px solid #4a2c00}
+.idea-badge.buy{background:#001c10;color:var(--mint);border:1px solid #004a2a}
+.idea-body{min-width:0}
+.idea-thesis{font-size:12.5px;line-height:1.6;margin-bottom:8px}
+.idea-triggers{display:flex;gap:12px;flex-wrap:wrap}
+.idea-trigger{background:#090e18;border:1px solid var(--line);border-radius:6px;padding:6px 10px;text-align:center}
+.idea-trigger .t-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.idea-trigger .t-val{font-size:13px;font-weight:800;margin-top:2px}
+.idea-stats{text-align:right;min-width:160px}
+.idea-stats .stat-row{display:flex;justify-content:space-between;gap:16px;padding:3px 0;font-size:11px}
+.idea-stats .stat-key{color:var(--muted)}.idea-stats .stat-val{font-weight:700}
+/* Distance gauge */
+.gauge-wrap{margin:10px 0 4px}
+.gauge-lbl{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px}
+.gauge-track{height:6px;background:#141e2e;border-radius:99px;overflow:hidden}
+.gauge-fill{height:100%;border-radius:99px;transition:width .6s ease;background:linear-gradient(90deg,var(--mint),var(--amber),var(--orange))}
+/* Historical edge */
+.edge-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.edge-card{background:#090e18;border-radius:8px;padding:12px}
+.edge-card.strong{border:1px solid #1a5c3a}.edge-card.weak{border:1px solid #5c1a1a}
+.edge-pct{font-size:28px;font-weight:900;line-height:1}
+.edge-n{font-size:10px;color:var(--muted);margin:3px 0 8px}
+.edge-plain{font-size:11px;line-height:1.6;color:var(--muted)}
+.edge-honest{font-size:10.5px;font-style:italic;margin-top:6px}
+/* Sparkline */
+.spark-wrap{position:relative;margin-top:6px}
+canvas#spark{display:block;width:100%;height:90px}
+.spark-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:2px}
+/* Risk checks compact */
+.checks-compact{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.chk{display:flex;justify-content:space-between;padding:4px 6px;border-radius:5px;background:#0a1220;font-size:11px}
+.chk-pass{color:var(--mint)}.chk-fail{color:var(--red)}.chk-unk{color:var(--muted)}
+/* Quote calculator */
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.calc-field{display:flex;flex-direction:column;gap:4px}
+.calc-field label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.calc-field input{background:#090e18;border:1px solid var(--line);border-radius:6px;padding:7px 9px;color:var(--text);font:inherit;font-size:13px;width:100%}
+.calc-field input:focus{outline:none;border-color:var(--blue)}
+.calc-result{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.calc-out{background:#090e18;border:1px solid var(--line);border-radius:7px;padding:9px;text-align:center}
+.calc-out .c-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.calc-out .c-val{font-size:14px;font-weight:800;margin-top:3px}
+/* Honest read */
+.honest{background:#10180e;border:1px solid #1f3a1c;border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.honest h3{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--mint);margin-bottom:8px}
+.honest p{font-size:12px;line-height:1.8;color:#a8c8b0}
+.honest .asym{font-size:13px;font-weight:700;color:var(--mint);margin-top:10px;padding:8px 10px;background:#0a1a0a;border-radius:6px;border-left:3px solid var(--mint)}
+/* Evidence */
+.ev{list-style:none}.ev li{padding:4px 0;border-bottom:1px solid #14202e;font-size:11.5px}
+.ev li:last-child{border:0}
+.ev.pos li::before{content:"▲ ";color:var(--mint)}.ev.neg li::before{content:"▼ ";color:var(--red)}
+/* Watch levels */
+.watch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.watch-card{background:#090e18;border:1px solid var(--line);border-radius:8px;padding:10px;text-align:center}
+.watch-price{font-size:15px;font-weight:800;margin:4px 0}
+.watch-label{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.watch-card.sell-zone{border-color:#3a2000}.watch-card.buy-zone{border-color:#003a20}.watch-card.inval-zone{border-color:#3a0010}
+/* TF grid */
+.tf-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px}
+.tf-card{background:#090e18;border:1px solid var(--line);border-radius:8px;padding:10px}
+.tf-head{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between}
+.tag{display:inline-block;font-size:9px;padding:2px 6px;border-radius:99px;background:#182338;color:var(--blue)}
+.tag.up{background:#0a2618;color:var(--mint)}.tag.dn{background:#250a0e;color:var(--red)}.tag.mx{background:#251e08;color:var(--amber)}
+/* Plan grid */
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.plan-card{background:#090e18;border:1px solid var(--line);border-radius:9px;padding:12px}
+.plan-card.cons{border-color:#0e3044}.plan-card.bal{border-color:#102060}.plan-card.agg{border-color:#28104a}
+/* Portfolio */
+.port-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.port-card{background:#090e18;border:1px solid var(--line);border-radius:9px;padding:13px}
+.port-card.hold{border-color:#1c2b3a}.port-card.p50{border-color:#0e3044}.port-card.p70{border-color:#28104a}
+/* Position controls */
+.ctrl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.ctrl-field{display:flex;flex-direction:column;gap:3px}
+.ctrl-field label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.ctrl-field input{background:#090e18;border:1px solid var(--line);border-radius:5px;padding:5px 7px;color:var(--text);font:inherit;font-size:12px}
+.ctrl-field input:focus{outline:none;border-color:var(--blue)}
+/* Methodology */
+.method-step{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.method-step:last-child{border:0}
+.method-num{min-width:24px;height:24px;border-radius:50%;background:#1a2e4a;border:1px solid #2a4060;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--blue);flex-shrink:0;margin-top:1px}
+.method-body h4{font-size:12px;font-weight:700;margin-bottom:2px}
+.method-body p{font-size:11px;color:var(--muted);line-height:1.6}
+/* Warnings */
+.warn{border-left:3px solid var(--amber);background:#1a120020;padding:7px 10px;border-radius:0 6px 6px 0;font-size:11px;margin:6px 0;color:var(--amber)}
+.info{border-left:3px solid var(--blue);background:#0d1a3020;padding:7px 10px;border-radius:0 6px 6px 0;font-size:11px;margin:6px 0;color:var(--blue)}
+.good{border-left:3px solid var(--mint);background:#0a1e1420;padding:7px 10px;border-radius:0 6px 6px 0;font-size:11px;margin:6px 0;color:#a0e8cc}
+/* Conf key */
+.conf-key{display:flex;gap:10px;font-size:10px;margin-bottom:8px;flex-wrap:wrap}
+.conf-key span{display:flex;align-items:center;gap:3px}
+/* Strategy table */
+table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);font-size:11px}
+.th{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.07em}
+/* Mono */
+.mono{font-family:ui-monospace,monospace;font-size:11px;background:#040608;padding:10px 12px;border-radius:7px;color:#8ea8cc;overflow-x:auto;white-space:pre;line-height:1.7}
+/* Refresh bar */
+.refresh{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.ts{font-size:10px;color:var(--muted)}
+.btn{border:0;border-radius:6px;padding:7px 13px;cursor:pointer;font:inherit;font-size:12px;font-weight:700}
+.btn-p{background:var(--mint);color:#040e08}.btn-s{background:#131f30;color:#fff;border:1px solid var(--line)}
+/* Loading */
+#lo{position:fixed;inset:0;background:#060810d0;display:none;align-items:center;justify-content:center;z-index:99}
+.lo-box{background:#0c1220;border:1px solid var(--line);border-radius:10px;padding:28px 36px;text-align:center}
+.lo-box p{color:var(--muted);font-size:11px;margin:7px 0 0}
+.spin{display:inline-block;width:26px;height:26px;border:2.5px solid var(--line);border-top-color:var(--mint);border-radius:50%;animation:sp .75s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+#offlineBanner{display:none;background:#1c0a0a;border:1px solid #5c1520;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--red);font-weight:700}
+.breakeven-note{font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.6;font-style:italic}
+@media(max-width:920px){.shell{display:block}aside{position:relative;height:auto}.tf-grid,.plan-grid,.port-grid,.watch-grid,.checks-compact,.edge-grid,.calc-result,.ctrl-grid{grid-template-columns:1fr 1fr}.s12,.s9,.s8,.s7,.s6,.s5,.s4,.s3,.s2{grid-column:1/-1}.idea-card{grid-template-columns:1fr}.idea-stats{text-align:left}}
+</style>
+</head>
+<body>
+<div id="lo"><div class="lo-box"><div class="spin"></div><p id="lm">Connecting…</p></div></div>
+<div class="shell">
+<aside>
+ <div class="brand">ASTEROID<small>TRADE PLANNING TERMINAL</small></div>
+ <div class="nav">
+  <div class="nav-section">Analysis</div>
+  <a class="active" data-page="command">Command Center</a>
+  <a data-page="watch">Watch Levels</a>
+  <a data-page="multitf">Multi-Timeframe</a>
+  <div class="nav-section">Portfolios</div>
+  <a data-page="portfolio">Paper Portfolios</a>
+  <a data-page="strategies">Strategy Lab</a>
+  <div class="nav-section">System</div>
+  <a data-page="risk">Risk Engine</a>
+  <a data-page="health">Data Health</a>
+  <a data-page="method">Methodology</a>
+ </div>
+ <div class="exec-off">LIVE EXECUTION<br><b>STRUCTURALLY DISABLED</b><br>No signer · No private key<br>No wallet adapter</div>
+</aside>
+
+<main>
+ <div class="topbar">
+  <div class="topbar-left">
+   <h1>ASTEROID / WETH</h1>
+   <div id="connBadge" class="conn conn-offline"><div class="conn-dot"></div><span id="connLabel">OFFLINE SNAPSHOT</span></div>
+  </div>
+  <div class="pills"><span class="pill red">NO SIGNER</span><span class="pill amber">RESEARCH ONLY</span></div>
+ </div>
+
+ <div id="offlineBanner">⚠ OFFLINE SNAPSHOT — server not responding. Showing last cached state. Pool price and liquidity shown below are from the last successful connection.</div>
+
+ <div class="refresh">
+  <button class="btn btn-p" onclick="fetchPlan()">Refresh Analysis</button>
+  <button class="btn btn-s" onclick="fetchLive()">Quick Live Check</button>
+  <span class="ts" id="tsRefresh">Last refresh: —</span>
+  <span class="ts" id="tsAge">Pool age: —</span>
+ </div>
+
+ <!-- ═══ COMMAND CENTER ═══ -->
+ <section id="command" class="page active">
+
+  <!-- TODAY'S IDEA — pinned top -->
+  <div class="idea-card">
+   <div>
+    <div id="ideaBadge" class="idea-badge wait">WAIT</div>
+    <div style="margin-top:8px;font-size:10px;color:var(--muted)" id="ideaRegime">—</div>
+   </div>
+   <div class="idea-body">
+    <div class="idea-thesis" id="ideaThesis">Loading…</div>
+    <div class="idea-triggers" id="ideaTriggers">
+     <div class="idea-trigger"><div class="t-lbl">Next Sell</div><div class="t-val" id="iSell" style="color:var(--orange)">—</div></div>
+     <div class="idea-trigger"><div class="t-lbl">Distance</div><div class="t-val" id="iDist" style="color:var(--amber)">—</div></div>
+     <div class="idea-trigger"><div class="t-lbl">Dip Watch</div><div class="t-val" id="iDip" style="color:var(--mint)">—</div></div>
+     <div class="idea-trigger"><div class="t-lbl">Inval.</div><div class="t-val" id="iInval" style="color:var(--red)">—</div></div>
+    </div>
+    <div class="gauge-wrap" id="gaugeWrap">
+     <div class="gauge-lbl"><span id="gCur">Current</span><span id="gTrig">Trigger</span></div>
+     <div class="gauge-track"><div class="gauge-fill" id="gaugeFill" style="width:0%"></div></div>
+    </div>
+   </div>
+   <div class="idea-stats" id="ideaStats">
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px">Historical Hit Rates</div>
+    <div class="stat-row"><span class="stat-key">Sell pumps</span><span class="stat-val" id="iSellHit" style="color:var(--mint)">—</span></div>
+    <div class="stat-row"><span class="stat-key">n</span><span class="stat-val" id="iSellN" style="color:var(--muted)">—</span></div>
+    <div class="stat-row"><span class="stat-key">Med. 14d return</span><span class="stat-val" id="iSellMed" style="color:var(--muted)">—</span></div>
+    <div style="height:8px"></div>
+    <div class="stat-row"><span class="stat-key">Buy dips</span><span class="stat-val" id="iDipHit" style="color:var(--red)">—</span></div>
+    <div class="stat-row"><span class="stat-key">n</span><span class="stat-val" id="iDipN" style="color:var(--muted)">—</span></div>
+    <div class="stat-row"><span class="stat-key">Med. 30d return</span><span class="stat-val" id="iDipMed" style="color:var(--muted)">—</span></div>
+    <div style="height:8px;border-top:1px solid var(--line);margin-top:4px;padding-top:4px"></div>
+    <div style="font-size:9px;color:var(--muted)">Source: 689-day on-chain history</div>
+    <div style="font-size:9px;color:var(--amber)">Not walk-forward validated</div>
+   </div>
+  </div>
+
+  <!-- HONEST READ -->
+  <div class="honest" id="honestRead" style="display:none">
+   <h3>Honest Read</h3>
+   <p id="honestText">—</p>
+   <div class="asym" id="honestAsym">—</div>
+  </div>
+
+  <div class="grid">
+   <article class="card s8">
+    <div class="lbl">Current Decision</div>
+    <div id="decBadge" class="dec dec-no">NO TRADE</div>
+    <span id="regimeBadge" class="regime-tag">—</span>
+    <p id="conclusion" style="font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:4px">Loading…</p>
+   </article>
+   <article class="card s4">
+    <div class="lbl">Your Position</div>
+    <div class="big" id="posVal">—</div>
+    <div class="sub">74,683,073 ASTEROID <span class="est">EST</span></div>
+    <div style="margin-top:10px">
+     <div class="row"><span class="row-key">Core (50% cfg)</span><span class="row-val">37,341,537</span></div>
+     <div class="row"><span class="row-key">Tradable (50%)</span><span class="row-val pos">37,341,536</span></div>
+     <div class="row"><span class="row-key">Core (70% cfg)</span><span class="row-val">22,404,922</span></div>
+     <div class="row"><span class="row-key">Tradable (70%)</span><span class="row-val pos">52,278,151</span></div>
+     <div class="row"><span class="row-key">External deposits</span><span class="row-val" style="color:var(--muted)">$0 — none approved</span></div>
+    </div>
+   </article>
+  </div>
+
+  <div class="grid">
+   <article class="card s3"><div class="lbl">DEX Price <span class="obs">OBS</span></div><div class="big" id="dexP">—</div><div class="sub" id="dexChg">—</div></article>
+   <article class="card s3"><div class="lbl">TV Price <span class="est">EST</span></div><div class="big" id="tvP">—</div><div class="sub" id="tvGap" style="color:var(--amber)">DEX gap: —</div></article>
+   <article class="card s3"><div class="lbl">Liquidity <span class="obs">OBS</span></div><div class="big" id="liqVal">—</div><div class="sub">Uniswap v2 pool TVL</div></article>
+   <article class="card s3"><div class="lbl">24H Volume <span class="obs">OBS</span></div><div class="big" id="volVal">—</div><div class="sub" id="volRat">—</div></article>
+  </div>
+
+  <div class="grid">
+   <article class="card s3"><div class="lbl">Gas (est) <span class="est">EST</span></div><div class="big" id="gasVal">—</div><div class="sub">~150k gas · Uniswap swap</div></article>
+   <article class="card s3"><div class="lbl">ETH/USD <span class="inf">INF</span></div><div class="big" id="ethVal">—</div><div class="sub">Inferred from pool reserves</div></article>
+   <article class="card s3"><div class="lbl">RPC Providers <span class="obs">OBS</span></div><div class="big" id="rpcVal">—</div><div class="sub" id="rpcDetail">—</div></article>
+   <article class="card s3"><div class="lbl">7D / 30D Returns <span class="obs">OBS</span></div><div class="big" id="ret7d" style="font-size:16px">—</div><div class="sub" id="ret30d">30D: —</div></article>
+  </div>
+
+  <!-- 180-day sparkline -->
+  <div class="grid">
+   <article class="card s12">
+    <div class="lbl">180-Day Price History <span class="obs">OBS</span> <span style="font-size:9px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">· from on-chain Sync events</span></div>
+    <div class="spark-wrap"><canvas id="spark"></canvas></div>
+    <div class="spark-labels"><span id="sparkStart">—</span><span id="sparkMid">—</span><span id="sparkEnd">—</span></div>
+   </article>
+  </div>
+
+  <div class="grid">
+   <article class="card s6">
+    <div class="lbl">Supporting Evidence</div>
+    <div class="conf-key"><span><span class="obs">OBS</span> observed</span><span><span class="est">EST</span> estimated</span><span><span class="inf">INF</span> inferred</span></div>
+    <ul class="ev pos" id="supportList"><li>Loading…</li></ul>
+   </article>
+   <article class="card s6">
+    <div class="lbl">Opposing Evidence</div>
+    <ul class="ev neg" id="opposeList"><li>Loading…</li></ul>
+   </article>
+  </div>
+
+  <div class="grid">
+   <article class="card s12"><div class="lbl">vs Doing Nothing</div><p id="vsHold" style="font-size:11.5px;color:var(--muted)">—</p></article>
+  </div>
+ </section>
+
+ <!-- ═══ WATCH LEVELS ═══ -->
+ <section id="watch" class="page">
+  <div class="lbl" style="margin-bottom:10px">Actionable Watch Levels — active even during NO TRADE</div>
+  <div class="warn">Research levels only. No execution should occur without full plan review and manual confirmation.</div>
+  <div class="watch-grid" style="margin-bottom:12px" id="watchGrid">
+   <div class="watch-card sell-zone"><div class="watch-label">Next Sell Watch</div><div class="watch-price" style="color:var(--orange)">—</div><div class="watch-label">Bag Builder trigger</div></div>
+   <div class="watch-card buy-zone"><div class="watch-label">Next Buyback Watch</div><div class="watch-price" style="color:var(--mint)">—</div><div class="watch-label">−25% from sell price</div></div>
+   <div class="watch-card inval-zone"><div class="watch-label">Bearish Invalidation</div><div class="watch-price" style="color:var(--red)">—</div><div class="watch-label">Reassess entire thesis</div></div>
+  </div>
+  <div class="grid">
+   <article class="card s6"><div class="lbl">Sell Watch Detail</div><div id="sellWatchDetail">—</div></article>
+   <article class="card s6"><div class="lbl">Buyback Watch Detail</div><div id="buyWatchDetail">—</div></article>
+   <article class="card s12">
+    <div class="lbl">S/R Levels <span class="est">EST</span> — from 1H chart, classified vs current price</div>
+    <table><thead><tr><th class="th">Classification</th><th class="th">Price (USD)</th><th class="th">Confidence</th><th class="th">Notes</th></tr></thead>
+    <tbody id="levTable"><tr><td class="td" colspan="4" style="color:var(--muted)">Loading…</td></tr></tbody></table>
+   </article>
+  </div>
+ </section>
+
+ <!-- ═══ MULTI-TF ═══ -->
+ <section id="multitf" class="page">
+  <div class="lbl" style="margin-bottom:8px">Multi-Timeframe Analysis <span class="est">EST</span></div>
+  <div class="info">Daily + 4H govern regime and trade eligibility. 1H defines setup structure. 15M confirms entries. 5M is execution timing only.</div>
+  <div class="tf-grid" id="tfGrid"></div>
+  <div class="warn">Volume trend UNKNOWN for all TFs — TV returns 0 volume for this pair. Use DEX 24H volume as proxy.</div>
+ </section>
+
+ <!-- ═══ PAPER PORTFOLIOS ═══ -->
+ <section id="portfolio" class="page">
+  <div class="lbl" style="margin-bottom:8px">Paper Portfolios</div>
+
+  <!-- Editable position controls -->
+  <div class="card" style="margin-bottom:12px">
+   <div class="lbl">Position Controls <span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)">— edit to recalculate breakeven</span></div>
+   <div class="ctrl-grid">
+    <div class="ctrl-field"><label>Total tokens</label><input id="ctrlTokens" type="number" value="74683073" onchange="recalcBreakeven()"></div>
+    <div class="ctrl-field"><label>Core % (50 cfg)</label><input id="ctrlCore" type="number" value="50" min="1" max="99" onchange="recalcBreakeven()"></div>
+    <div class="ctrl-field"><label>Sell tranche %</label><input id="ctrlTranche" type="number" value="15" min="1" max="50" onchange="recalcBreakeven()"></div>
+    <div class="ctrl-field"><label>Last action price ($)</label><input id="ctrlLastPrice" type="number" value="0" step="0.00000001" onchange="recalcBreakeven()"></div>
+   </div>
+   <div class="breakeven-note" id="breakevenNote">Enter values above to see breakeven requirements.</div>
+  </div>
+
+  <div class="port-grid">
+   <div class="port-card hold">
+    <div class="lbl">Buy-and-Hold Benchmark</div>
+    <div class="row"><span class="row-key">Tokens held</span><span class="row-val" style="color:var(--mint)">74,683,073 <span class="obs">OBS</span></span></div>
+    <div class="row"><span class="row-key">Current value</span><span class="row-val" id="holdVal">—</span></div>
+    <div class="row"><span class="row-key">Entry price (est.)</span><span class="row-val" style="color:var(--amber)">$0.00015421 <span class="est">EST</span></span></div>
+    <div class="row"><span class="row-key">Entry value</span><span class="row-val" style="color:var(--amber)">$11,514.67 <span class="est">EST</span></span></div>
+    <div class="row"><span class="row-key">Change vs entry</span><span class="row-val" id="holdChg">—</span></div>
+    <div class="row"><span class="row-key">Decline from entry <span class="est">EST</span></span><span class="row-val neg" id="holdDrawdown">—</span></div>
+    <div class="row"><span class="row-key">Realized P&L</span><span class="row-val">$0</span></div>
+    <div class="row"><span class="row-key">Trades</span><span class="row-val">0</span></div>
+    <div class="row"><span class="row-key">Gas paid</span><span class="row-val">$0</span></div>
+   </div>
+   <div class="port-card p50">
+    <div class="lbl">50% Tradable · Bag Builder</div>
+    <div class="row"><span class="row-key">Strategy</span><span class="row-val">Bag Builder v1</span></div>
+    <div class="row"><span class="row-key">Core floor</span><span class="row-val">37,341,537 tokens</span></div>
+    <div class="row"><span class="row-key">Tradable</span><span class="row-val pos">37,341,536 tokens</span></div>
+    <div class="row"><span class="row-key">Token equity</span><span class="row-val" id="p50TokenVal">—</span></div>
+    <div class="row"><span class="row-key">Cash reserve</span><span class="row-val">$0</span></div>
+    <div class="row"><span class="row-key">Realized P&L</span><span class="row-val">$0</span></div>
+    <div class="row"><span class="row-key">Trades (paper)</span><span class="row-val">0</span></div>
+    <div class="row"><span class="row-key">Gas (paper)</span><span class="row-val">$0</span></div>
+    <div class="row"><span class="row-key">vs Hold</span><span class="row-val" id="p50vsHold">Waiting for first trade</span></div>
+    <div style="margin-top:8px;font-size:10px;color:var(--muted)">No trades triggered in 2-month simulation. Pump threshold not met.</div>
+   </div>
+   <div class="port-card p70">
+    <div class="lbl">70% Tradable · Bag Builder</div>
+    <div class="row"><span class="row-key">Core floor</span><span class="row-val">22,404,922 tokens</span></div>
+    <div class="row"><span class="row-key">Tradable</span><span class="row-val pos">52,278,151 tokens</span></div>
+    <div class="row"><span class="row-key">Token equity</span><span class="row-val" id="p70TokenVal">—</span></div>
+    <div class="row"><span class="row-key">Cash reserve</span><span class="row-val">$0</span></div>
+    <div class="row"><span class="row-key">Realized P&L</span><span class="row-val">$0</span></div>
+    <div class="row"><span class="row-key">Trades (paper)</span><span class="row-val">0</span></div>
+    <div class="row"><span class="row-key">vs Hold</span><span class="row-val" id="p70vsHold">Waiting for first trade</span></div>
+   </div>
+  </div>
+  <div class="warn" style="margin-top:10px">Pool reserves for the 2-month window are fully reconstructed (138,226 Sync events, 100% coverage). Still missing: ETH/USD per swap, gas receipts per block, and price impact at execution time. All simulation results are estimated.</div>
+ </section>
+
+ <!-- ═══ STRATEGY LAB ═══ -->
+ <section id="strategies" class="page">
+  <div class="lbl" style="margin-bottom:8px">Strategy Lab — Historical Results <span class="est">EST</span></div>
+
+  <!-- Historical edge -->
+  <div class="grid">
+   <article class="card s12">
+    <div class="lbl">Calibrated Historical Signal Hit Rates <span class="obs">OBS</span> — 689-day on-chain history</div>
+    <div class="warn" style="margin-bottom:10px">Not walk-forward validated. Regime bias, duplicate signals, and gas not yet stripped. Use as directional evidence, not a probability.</div>
+    <div class="edge-grid" id="edgeGrid">
+     <div class="edge-card strong">
+      <div class="edge-pct" style="color:var(--mint)" id="eSellPct">—%</div>
+      <div class="edge-n" id="eSellN">n=—</div>
+      <div style="font-weight:700;margin-bottom:4px;font-size:12px">Sell Pumps</div>
+      <div class="edge-plain" id="eSellPlain">—</div>
+      <div class="edge-honest" style="color:var(--mint)" id="eSellHonest">—</div>
+     </div>
+     <div class="edge-card weak">
+      <div class="edge-pct" style="color:var(--red)" id="eDipPct">—%</div>
+      <div class="edge-n" id="eDipN">n=—</div>
+      <div style="font-weight:700;margin-bottom:4px;font-size:12px">Buy Dips</div>
+      <div class="edge-plain" id="eDipPlain">—</div>
+      <div class="edge-honest" style="color:var(--red)" id="eDipHonest">—</div>
+     </div>
+    </div>
+    <div class="asym" id="asymSummary" style="margin-top:12px">—</div>
+   </article>
+  </div>
+
+  <div class="warn">All simulation results are estimated. Historical reserves reconstructed from 138,226 Sync events. ETH/USD is fixed at $1,883. Results are NOT walk-forward validated.</div>
+  <div class="grid">
+   <article class="card s12">
+    <div class="lbl">Bag Builder — 2-Month Simulation</div>
+    <table>
+     <thead><tr><th class="th">Config</th><th class="th">Trades</th><th class="th">Token Δ</th><th class="th">Cash End</th><th class="th">Equity End <span class="est">EST</span></th><th class="th">vs Hold</th><th class="th">Gas</th><th class="th">Note</th></tr></thead>
+     <tbody>
+      <tr><td class="td">50% tradable · pump@40%</td><td class="td">0</td><td class="td" style="color:var(--muted)">0</td><td class="td">$0</td><td class="td">$6,533.83</td><td class="td" style="color:var(--muted)">—</td><td class="td">$0</td><td class="td" style="color:var(--muted);font-size:10px">No pump reached 40% threshold</td></tr>
+      <tr><td class="td">70% tradable · pump@40%</td><td class="td">0</td><td class="td" style="color:var(--muted)">0</td><td class="td">$0</td><td class="td">$6,533.83</td><td class="td" style="color:var(--muted)">—</td><td class="td">$0</td><td class="td" style="color:var(--muted);font-size:10px">Same — threshold too high for regime</td></tr>
+     </tbody>
+    </table>
+   </article>
+   <article class="card s6">
+    <div class="lbl">Why Zero Trades</div>
+    <p style="font-size:11.5px;color:var(--muted);line-height:1.7">The 2-month period did not produce a +40% pump from any anchor price within the cooldown window. The Bag Builder correctly abstained. Lowering the pump threshold to 15–20% would have triggered trades, but increases false positives and needs calibration against more data.</p>
+   </article>
+   <article class="card s6">
+    <div class="lbl">Before Trusting Results</div>
+    <ol style="font-size:11.5px;color:var(--muted);padding-left:16px;line-height:2">
+     <li>Per-swap ETH/USD from Chainlink or TWAP oracle</li>
+     <li>Exact gas receipts for each historical trade slot</li>
+     <li>Walk-forward validation (train / validate / test split)</li>
+     <li>Regime labelling across full history</li>
+     <li>Out-of-sample win rate ≥55% after all costs</li>
+    </ol>
+   </article>
+  </div>
+ </section>
+
+ <!-- ═══ RISK ENGINE ═══ -->
+ <section id="risk" class="page">
+  <div class="lbl" style="margin-bottom:8px">Risk Engine — Hard Rules</div>
+  <div class="info">Every check must pass before a trade is valid. A single FAIL blocks all plans.</div>
+  <div class="grid">
+   <article class="card s6">
+    <div class="lbl">Live Risk Checks</div>
+    <div class="checks-compact" id="riskChecks"><div style="color:var(--muted);font-size:11px">Loading…</div></div>
+   </article>
+   <article class="card s6">
+    <div class="lbl">Configured Hard Limits</div>
+    <div class="row"><span class="row-key">Min reward:risk</span><span class="row-val">2.0×</span></div>
+    <div class="row"><span class="row-key">Max trade size</span><span class="row-val">20% of tradable per action</span></div>
+    <div class="row"><span class="row-key">Max daily actions</span><span class="row-val">2</span></div>
+    <div class="row"><span class="row-key">Min cooldown</span><span class="row-val">6 hours</span></div>
+    <div class="row"><span class="row-key">Min liquidity</span><span class="row-val">$500,000</span></div>
+    <div class="row"><span class="row-key">Max gas per trade</span><span class="row-val">$80</span></div>
+    <div class="row"><span class="row-key">Max price impact</span><span class="row-val">75 bps</span></div>
+    <div class="row"><span class="row-key">Core token floor</span><span class="row-val pos">ALWAYS PROTECTED</span></div>
+    <div class="row"><span class="row-key">Leverage</span><span class="row-val pos">NEVER</span></div>
+    <div class="row"><span class="row-key">Auto-execution</span><span class="row-val pos">STRUCTURALLY IMPOSSIBLE</span></div>
+   </article>
+
+   <!-- Quote calculator -->
+   <article class="card s12">
+    <div class="lbl">Round-Trip Cost Calculator <span class="est">EST</span></div>
+    <div class="info" style="margin-bottom:10px">Enter a candidate size and gas to see the real cost of round-tripping. Backed by Uniswap v2 AMM math against live pool reserves.</div>
+    <div class="calc-grid">
+     <div class="calc-field"><label>Candidate size (USD)</label><input id="calcSize" type="number" value="500" min="10"></div>
+     <div class="calc-field"><label>Round-trip gas (USD)</label><input id="calcGas" type="number" value="20" min="1"></div>
+    </div>
+    <button class="btn btn-p" onclick="runCalc()" style="margin-bottom:10px">Calculate</button>
+    <div class="calc-result" id="calcResult">
+     <div class="calc-out"><div class="c-lbl">Total cost</div><div class="c-val" id="cTotalCost">—</div></div>
+     <div class="calc-out"><div class="c-lbl">Cost as % of size</div><div class="c-val" id="cCostPct">—</div></div>
+     <div class="calc-out"><div class="c-lbl">Entry impact (bps)</div><div class="c-val" id="cEntryImpact">—</div></div>
+     <div class="calc-out"><div class="c-lbl">Exit impact (bps)</div><div class="c-val" id="cExitImpact">—</div></div>
+     <div class="calc-out"><div class="c-lbl">Break-even edge</div><div class="c-val" id="cBreakeven">—</div></div>
+     <div class="calc-out"><div class="c-lbl">Signal</div><div class="c-val" id="cSignal" style="color:var(--red)">—</div></div>
+    </div>
+    <div id="calcBlockers" style="margin-top:8px"></div>
+    <!-- Sell-vs-hold breakeven -->
+    <div id="beNote" class="breakeven-note">Refresh analysis first to see sell-vs-hold breakeven.</div>
+   </article>
+
+   <article class="card s12">
+    <div class="lbl">Trade Plans (Bag Builder) — Current</div>
+    <div class="plan-grid" id="planGrid">
+     <div class="plan-card cons"><div class="lbl">Conservative</div><div style="color:var(--muted);font-size:11px">Loading…</div></div>
+     <div class="plan-card bal"><div class="lbl">Balanced</div><div style="color:var(--muted);font-size:11px">Loading…</div></div>
+     <div class="plan-card agg"><div class="lbl">Aggressive</div><div style="color:var(--muted);font-size:11px">Loading…</div></div>
+    </div>
+   </article>
+  </div>
+ </section>
+
+ <!-- ═══ DATA HEALTH ═══ -->
+ <section id="health" class="page">
+  <div class="lbl" style="margin-bottom:8px">Data Health &amp; Evidence Quality</div>
+  <div class="conf-key" style="margin-bottom:10px;font-size:11px">
+   <span><span class="obs">OBS</span> = directly observed on-chain</span>
+   <span><span class="est">EST</span> = estimated / calculated</span>
+   <span><span class="inf">INF</span> = inferred from other data</span>
+   <span><span class="unk">UNK</span> = unavailable / uncalibrated</span>
+  </div>
+  <div class="grid">
+   <article class="card s6">
+    <div class="lbl">On-Chain Evidence — Completed</div>
+    <div class="row"><span class="row-key">Sync events reconstructed <span class="obs">OBS</span></span><span class="row-val pos">138,226 / 138,226</span></div>
+    <div class="row"><span class="row-key">Swap transactions covered <span class="obs">OBS</span></span><span class="row-val pos">131,468 / 131,468</span></div>
+    <div class="row"><span class="row-key">Coverage</span><span class="row-val pos">100.0%</span></div>
+    <div class="row"><span class="row-key">Missing swaps</span><span class="row-val pos">0</span></div>
+    <div class="row"><span class="row-key">History span</span><span class="row-val" style="color:var(--mint)">2026-05-31 → 2026-07-30 <span class="obs">OBS</span></span></div>
+    <div class="row"><span class="row-key">Pool addresses verified</span><span class="row-val pos">Yes — 4/4 RPCs agree</span></div>
+    <div class="row"><span class="row-key">Token contract</span><span class="row-val" style="font-size:10px;font-family:monospace;color:var(--mint)">0xf280b16e… <span class="obs">OBS</span></span></div>
+   </article>
+   <article class="card s6">
+    <div class="lbl">Live Data Status</div>
+    <div class="row"><span class="row-key">RPC providers <span class="obs">OBS</span></span><span class="row-val" id="hRpc">—</span></div>
+    <div class="row"><span class="row-key">Block agreement <span class="obs">OBS</span></span><span class="row-val" id="hAgree">—</span></div>
+    <div class="row"><span class="row-key">Data age</span><span class="row-val" id="hAge">—</span></div>
+    <div class="row"><span class="row-key">DEX price <span class="obs">OBS</span></span><span class="row-val" id="hDex">—</span></div>
+    <div class="row"><span class="row-key">TV price <span class="est">EST</span></span><span class="row-val" id="hTv">—</span></div>
+    <div class="row"><span class="row-key">TV/DEX gap</span><span class="row-val" id="hGap">—</span></div>
+    <div class="row"><span class="row-key">ETH/USD <span class="inf">INF</span></span><span class="row-val" id="hEth">—</span></div>
+    <div class="row"><span class="row-key">Market identity verified</span><span class="row-val" id="hVerif">—</span></div>
+   </article>
+   <article class="card s12">
+    <div class="lbl">Known Limitations</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+     <div>
+      <div class="row"><span class="row-key">Historical ETH/USD per swap</span><span class="row-val amb">Fixed $1,883 used <span class="est">EST</span></span></div>
+      <div class="row"><span class="row-key">Gas receipts per block</span><span class="row-val amb">Base estimate only <span class="est">EST</span></span></div>
+      <div class="row"><span class="row-key">Walk-forward backtest</span><span class="row-val" style="color:var(--muted)">Not completed <span class="unk">UNK</span></span></div>
+      <div class="row"><span class="row-key">TV volume data</span><span class="row-val neg">Returning 0 for this pair</span></div>
+     </div>
+     <div>
+      <div class="row"><span class="row-key">Hit-rate regime audit</span><span class="row-val amb">Not done — may have bias <span class="unk">UNK</span></span></div>
+      <div class="row"><span class="row-key">Calibrated probability model</span><span class="row-val" style="color:var(--muted)">UNAVAILABLE <span class="unk">UNK</span></span></div>
+      <div class="row"><span class="row-key">ETH market direction</span><span class="row-val" style="color:var(--muted)">Not pulled <span class="unk">UNK</span></span></div>
+      <div class="row"><span class="row-key">Swing highs/lows</span><span class="row-val amb">500 5M TV bars only <span class="est">EST</span></span></div>
+     </div>
+    </div>
+   </article>
+  </div>
+ </section>
+
+ <!-- ═══ METHODOLOGY ═══ -->
+ <section id="method" class="page">
+  <div class="lbl" style="margin-bottom:12px">What This Tool Is — and Is Not</div>
+  <div class="grid">
+   <article class="card s12">
+    <div class="lbl">Evidence Ladder</div>
+    <div class="method-step"><div class="method-num">1</div><div class="method-body"><h4>On-chain Observation <span class="obs">OBS</span></h4><p>Pool reserves from 4 independent RPC providers, block-level agreement check. This is the only data layer with no interpretation.</p></div></div>
+    <div class="method-step"><div class="method-num">2</div><div class="method-body"><h4>Historical Replay <span class="obs">OBS</span></h4><p>138,226 Sync events, 100% coverage, 61 days. Reserve state at each block reconstructed exactly. Price and liquidity at each swap are observed, not modeled.</p></div></div>
+    <div class="method-step"><div class="method-num">3</div><div class="method-body"><h4>Signal Statistics <span class="obs">OBS</span> / <span class="unk">NOT WALK-FORWARD</span></h4><p>78 pump signals: 78% faded within 14 days. 217 dip signals: 13% recovered within 30 days. Computed from full history but not validated out-of-sample.</p></div></div>
+    <div class="method-step"><div class="method-num">4</div><div class="method-body"><h4>Multi-TF Technical Analysis <span class="est">EST</span></h4><p>EMA, RSI, MACD, Bollinger, swing highs/lows derived from TV 5M bars. Regime classification from EMA alignment across Daily/4H/1H. Volume data unavailable from TV for this pair.</p></div></div>
+    <div class="method-step"><div class="method-num">5</div><div class="method-body"><h4>Simulation <span class="est">EST</span></h4><p>Bag Builder strategy replayed against historical swaps. ETH/USD fixed at $1,883. Gas estimated. Price impact estimated. Not a real performance record.</p></div></div>
+    <div class="method-step"><div class="method-num">6</div><div class="method-body"><h4>Paper Trading <span class="est">EST</span></h4><p>No live trades placed. Paper account tracks hypothetical entries/exits for comparison against hold. Not a verified track record.</p></div></div>
+    <div class="method-step"><div class="method-num">✗</div><div class="method-body"><h4 style="color:var(--red)">What This Tool Cannot Do</h4><p>It cannot execute transactions. It has no wallet, no signer, no private key. A calibrated probability model has not graduated. Statistical edge is unconfirmed. Do not treat any plan as a recommendation — treat it as a structured research artifact.</p></div></div>
+   </article>
+   <article class="card s12"><div class="lbl">Terminal Commands</div><div class="mono" id="cmdBlock">Loading…</div></article>
+  </div>
+ </section>
+
+</main>
+</div>
+
+<script>
+let D=null,connected=false,LIVE_PRICE=0;
+
+// GitHub Pages has no always-running Python process. Its scheduled workflow
+// publishes the same read-only API responses as static JSON snapshots.
+const STATIC_API = location.hostname.endsWith('github.io');
+const browserFetch = window.fetch.bind(window);
+window.fetch = (input, init) => {
+ const raw = typeof input === 'string' ? input : input.url;
+ if (!STATIC_API || !raw.startsWith('/api/')) return browserFetch(input, init);
+ const path = raw.split('?')[0];
+ const map = {
+  '/api/live':'data/live.json',
+  '/api/heartbeat':'data/heartbeat.json',
+  '/api/trade_plan':'data/trade_plan.json',
+  '/api/cached_plan':'data/trade_plan.json',
+  '/api/quote':'data/quote.json',
+  '/api/signal_stats':'data/signal_stats.json',
+  '/api/evidence':'data/evidence.json',
+  '/api/bag-comparison':'data/bag_comparison.json'
+ };
+ return browserFetch(map[path] || raw, init);
+};
+
+function setConn(state){
+ connected=(state==='live');
+ const b=document.getElementById('connBadge');const l=document.getElementById('connLabel');
+ const ob=document.getElementById('offlineBanner');
+ b.className='conn conn-'+state;
+ l.textContent=state==='live'?'LIVE · 4/4 RPCs agree':state==='degraded'?'DEGRADED':'OFFLINE SNAPSHOT';
+ ob.style.display=state==='offline'?'block':'none';
+}
+
+async function fetchLive(){
+ try{
+  const r=await fetch('/api/live',{signal:AbortSignal.timeout(8000)});
+  if(!r.ok)throw new Error(r.status);
+  const d=await r.json();
+  const ok=d.providers_ok||0;const ag=d.rpc_agreement;
+  setConn(ok>=4&&ag?'live':ok>=2?'degraded':'offline');
+  const dex=d.dex||{};const obs=(d.observations||[{}])[0];
+  const p=parseFloat(dex.price_usd||0);LIVE_PRICE=p;
+  if(p>0){
+   document.getElementById('dexP').textContent='$'+p.toFixed(8);
+   const chg=parseFloat(dex.change_24h_pct||0);
+   document.getElementById('dexChg').textContent='24H: '+(chg>=0?'+':'')+chg.toFixed(2)+'%';
+   document.getElementById('dexChg').style.color=chg>=0?'var(--mint)':'var(--red)';
+   const liq=parseFloat(dex.liquidity_usd||0);
+   document.getElementById('liqVal').textContent='$'+(liq>=1e6?(liq/1e6).toFixed(2)+'M':(liq/1e3).toFixed(0)+'K');
+   const vol=parseFloat(dex.volume_24h_usd||0);
+   document.getElementById('volVal').textContent='$'+(vol>=1e6?(vol/1e6).toFixed(2)+'M':(vol/1e3).toFixed(0)+'K');
+   document.getElementById('volRat').textContent=liq>0?'Vol/Liq: '+(vol/liq).toFixed(2)+'×':'—';
+   const posVal=74683073*p;
+   document.getElementById('posVal').textContent='$'+posVal.toFixed(2);
+   document.getElementById('holdVal').textContent='$'+posVal.toFixed(2);
+   document.getElementById('p50TokenVal').textContent='$'+posVal.toFixed(2);
+   document.getElementById('p70TokenVal').textContent='$'+posVal.toFixed(2);
+   const entry=11514.67;const cp=(posVal/entry-1)*100;
+   document.getElementById('holdChg').textContent=(cp>=0?'+':'')+cp.toFixed(1)+'%';
+   document.getElementById('holdChg').style.color=cp>=0?'var(--mint)':'var(--red)';
+   const dd=document.getElementById('holdDrawdown');if(dd){dd.textContent=(cp>=0?'+':'')+cp.toFixed(1)+'% vs est. entry $0.00015421';dd.style.color=cp>=0?'var(--mint)':'var(--red)';}
+  }
+  const gas_gwei=parseFloat(obs.gas_gwei||0);
+  const eth_usd=parseFloat((d.state||{}).eth_usd||0);
+  const gas_usd=gas_gwei*150000*1e-9*eth_usd;
+  document.getElementById('gasVal').textContent=gas_usd>0?'$'+gas_usd.toFixed(2):'—';
+  document.getElementById('ethVal').textContent=eth_usd>0?'$'+eth_usd.toFixed(0):'—';
+  document.getElementById('rpcVal').textContent=ok+'/4';
+  document.getElementById('rpcDetail').textContent=ag?'All block hashes match':'RPC disagreement detected';
+  document.getElementById('tsAge').textContent='Pool age: '+(d.age_seconds||0)+'s';
+ }catch(e){setConn('offline');}
+}
+
+async function fetchPlan(){
+ show('lo');document.getElementById('lm').textContent='Running full analysis…';
+ try{
+  const r=await fetch('/api/trade_plan',{signal:AbortSignal.timeout(120000)});
+  if(!r.ok){const e=await r.json();alert('Error: '+(e.error||r.status));return;}
+  D=await r.json();
+  if(D.error){alert('Plan error: '+D.error);return;}
+  renderAll(D);
+ }catch(e){
+  try{const r2=await fetch('/api/cached_plan');if(r2.ok){D=await r2.json();if(!D.error){renderAll(D);setConn('offline');return;}}}catch(_){}
+  setConn('offline');
+ }finally{hide('lo');}
+}
+
+function renderAll(d){
+ if(!d||d.error)return;
+ document.getElementById('tsRefresh').textContent='Last refresh: '+new Date().toLocaleTimeString();
+ const ms=d.market_snapshot||{};
+ const age=ms.data_age_seconds||0;
+ document.getElementById('tsAge').textContent='Pool age: '+age+'s';
+
+ if(ms.rpc_providers_ok>=4&&ms.rpc_agreement)setConn('live');
+ else if(ms.rpc_providers_ok>=2)setConn('degraded');
+ else setConn('offline');
+
+ const dexP=parseFloat(ms.dex_price_usd||0);LIVE_PRICE=dexP;
+ document.getElementById('dexP').textContent='$'+dexP.toFixed(8);
+ const chg=parseFloat(ms.change_24h_pct||'0');
+ document.getElementById('dexChg').textContent='24H: '+(chg>=0?'+':'')+chg.toFixed(2)+'%';
+ document.getElementById('dexChg').style.color=chg>=0?'var(--mint)':'var(--red)';
+ document.getElementById('tvP').textContent='$'+parseFloat(ms.tv_price_usd||0).toFixed(8);
+ const gap=parseFloat(ms.tv_dex_discrepancy_pct||'0');
+ document.getElementById('tvGap').textContent='DEX gap: '+gap.toFixed(1)+'% '+(gap>10?'⚠':'');
+ document.getElementById('tvGap').style.color=gap>10?'var(--amber)':'var(--muted)';
+ const liq=parseFloat((ms.liquidity_usd||'0').replace(/[$,]/g,''));
+ document.getElementById('liqVal').textContent='$'+(liq>=1e6?(liq/1e6).toFixed(2)+'M':(liq/1e3).toFixed(0)+'K');
+ document.getElementById('volVal').textContent=ms.volume_24h_usd||'—';
+ document.getElementById('volRat').textContent=liq>0?'Vol/Liq: '+(parseFloat((ms.volume_24h_usd||'0').replace(/[$,]/g,''))/liq).toFixed(2)+'×':'—';
+ document.getElementById('gasVal').textContent=ms.gas_estimate_usd||'—';
+ document.getElementById('ethVal').textContent=ms.eth_usd?'$'+parseFloat(ms.eth_usd).toFixed(0):'—';
+ document.getElementById('rpcVal').textContent=(ms.rpc_providers_ok||0)+'/4';
+ document.getElementById('rpcDetail').textContent=ms.rpc_agreement?'All block hashes match':'Providers disagree';
+
+ // Position
+ if(dexP>0){
+  const pv=74683073*dexP;
+  document.getElementById('posVal').textContent='$'+pv.toFixed(2);
+  document.getElementById('holdVal').textContent='$'+pv.toFixed(2);
+  document.getElementById('p50TokenVal').textContent='$'+pv.toFixed(2);
+  document.getElementById('p70TokenVal').textContent='$'+pv.toFixed(2);
+  document.getElementById('p50vsHold').textContent='No trades — same as hold';
+  document.getElementById('p70vsHold').textContent='No trades — same as hold';
+  const e=11514.67;const cp=(pv/e-1)*100;
+  document.getElementById('holdChg').textContent=(cp>=0?'+':'')+cp.toFixed(1)+'%';
+  document.getElementById('holdChg').style.color=cp>=0?'var(--mint)':'var(--red)';
+  const dd=document.getElementById('holdDrawdown');if(dd){dd.textContent=(cp>=0?'+':'')+cp.toFixed(1)+'% vs est. entry $0.00015421';dd.style.color=cp>=0?'var(--mint)':'var(--red)';}
+ }
+
+ // Historical returns from signal_stats
+ const css=d.calibrated_signal_stats||{};
+ if(css.ret_7d!==undefined){
+  document.getElementById('ret7d').textContent=(css.ret_7d>=0?'+':'')+css.ret_7d.toFixed(1)+'%';
+  document.getElementById('ret7d').style.color=css.ret_7d>=0?'var(--mint)':'var(--red)';
+  document.getElementById('ret30d').textContent='30D: '+(css.ret_30d>=0?'+':'')+css.ret_30d.toFixed(1)+'%';
+ }
+
+ // Decision
+ const dec=d.current_decision||'NO TRADE';
+ const b=document.getElementById('decBadge');b.textContent=dec;b.className='dec '+dClass(dec);
+ document.getElementById('regimeBadge').textContent=(d.market_regime||{}).classification||'—';
+ document.getElementById('conclusion').textContent=d.final_conclusion||'—';
+
+ // Today's Idea card
+ renderIdea(d);
+
+ // Honest read
+ if(css.asymmetric_summary){
+  document.getElementById('honestText').textContent=
+   'This terminal\'s 689-day history shows a decisive asymmetry. '+css.pump_sell?.plain+' '+css.dip_buy?.plain+
+   ' The Bag Builder strategy is designed to exploit the sell side of this asymmetry — not the buy side.';
+  document.getElementById('honestAsym').textContent=css.asymmetric_summary;
+  document.getElementById('honestRead').style.display='block';
+ }
+
+ // Calibrated edge in Strategy Lab
+ if(css.pump_sell){
+  const ps=css.pump_sell,db=css.dip_buy||{};
+  document.getElementById('eSellPct').textContent=ps.pct_lower_14d+'%';
+  document.getElementById('eSellN').textContent='n='+ps.n+' pump signals';
+  document.getElementById('eSellPlain').textContent=ps.plain||'—';
+  document.getElementById('eSellHonest').textContent=ps.honest_read||'—';
+  document.getElementById('eDipPct').textContent=db.pct_higher_30d+'%';
+  document.getElementById('eDipN').textContent='n='+db.n+' dip signals';
+  document.getElementById('eDipPlain').textContent=db.plain||'—';
+  document.getElementById('eDipHonest').textContent=db.honest_read||'—';
+  document.getElementById('asymSummary').textContent=css.asymmetric_summary||'—';
+  // Also update Today's Idea stats
+  document.getElementById('iSellHit').textContent=ps.pct_lower_14d+'%';
+  document.getElementById('iSellN').textContent=ps.n;
+  document.getElementById('iSellMed').textContent=ps.median_fwd_14d_pct+'%';
+  document.getElementById('iDipHit').textContent=db.pct_higher_30d+'%';
+  document.getElementById('iDipN').textContent=db.n;
+  document.getElementById('iDipMed').textContent=db.median_fwd_30d_pct+'%';
+ }
+
+ // Sparkline
+ renderSpark(d.price_history_180d||[],dexP);
+
+ // Evidence
+ setList('supportList',d.supporting_evidence||[]);
+ setList('opposeList',d.opposing_evidence||[]);
+ document.getElementById('vsHold').textContent=d.vs_doing_nothing||'—';
+
+ // Watch
+ renderWatch(d);
+ // TF
+ renderTF(d.multi_timeframe||{});
+ // Checks + plans
+ renderChecks(d.risk_engine||{});
+ renderPlans(d.plans||{});
+ // Sell-vs-hold breakeven
+ renderBreakeven(d);
+ // Health
+ document.getElementById('hRpc').textContent=(ms.rpc_providers_ok||0)+'/4 responding';
+ document.getElementById('hRpc').style.color=(ms.rpc_providers_ok||0)>=4?'var(--mint)':(ms.rpc_providers_ok||0)>=2?'var(--amber)':'var(--red)';
+ document.getElementById('hAgree').textContent=ms.rpc_agreement?'Yes — all block hashes match':'No — divergence detected';
+ document.getElementById('hAgree').style.color=ms.rpc_agreement?'var(--mint)':'var(--red)';
+ document.getElementById('hAge').textContent=age+'s';
+ document.getElementById('hAge').style.color=age<=30?'var(--mint)':'var(--red)';
+ document.getElementById('hDex').textContent='$'+dexP.toFixed(8);
+ document.getElementById('hTv').textContent='$'+parseFloat(ms.tv_price_usd||0).toFixed(8);
+ document.getElementById('hGap').textContent=gap.toFixed(1)+'% — '+(gap>10?'⚠ exceeds 10% threshold':'within tolerance');
+ document.getElementById('hGap').style.color=gap>10?'var(--amber)':'var(--mint)';
+ document.getElementById('hEth').textContent=ms.eth_usd?'$'+parseFloat(ms.eth_usd).toFixed(2)+' (from pool reserves)':'—';
+ document.getElementById('hVerif').textContent=ms.market_verified?'PASS':'FAIL';
+ document.getElementById('hVerif').style.color=ms.market_verified?'var(--mint)':'var(--red)';
+ renderCmds();
+}
+
+function renderIdea(d){
+ const dec=d.current_decision||'NO TRADE';
+ const plans=d.plans||{};const p=plans.balanced||plans.conservative||{};
+ const ms=d.market_snapshot||{};
+ const dexP=parseFloat(ms.dex_price_usd||0);
+ const sellTrig=parseFloat(p.sell_trigger_price_usd||0);
+ const bbTrig=parseFloat(p.buyback_trigger_usd||0);
+ const kl=d.key_levels||{};
+ const inval=parseFloat(kl.bearish_invalidation||0);
+
+ // Badge
+ const ib=document.getElementById('ideaBadge');
+ ib.textContent=dec.includes('NO TRADE')?'NO TRADE':dec.includes('SELL')?'SELL PORTION':dec.includes('WAIT')?'WAIT':'HOLD';
+ ib.className='idea-badge '+(dec.includes('NO TRADE')||dec==='NO TRADE'?'no':dec.includes('SELL')?'sell':dec.includes('WAIT')?'wait':'no');
+ document.getElementById('ideaRegime').textContent=(d.market_regime||{}).classification||'—';
+
+ const css=d.calibrated_signal_stats||{};
+ document.getElementById('ideaThesis').textContent=d.final_conclusion||d.vs_doing_nothing||'—';
+ document.getElementById('iSell').textContent=sellTrig>0?'$'+sellTrig.toFixed(8):'—';
+ document.getElementById('iDip').textContent=bbTrig>0?'$'+bbTrig.toFixed(8):'—';
+ document.getElementById('iInval').textContent=inval>0?'$'+inval.toFixed(8):'—';
+
+ // Distance to trigger
+ if(dexP>0&&sellTrig>0){
+  const dist=(sellTrig/dexP-1)*100;
+  document.getElementById('iDist').textContent='+'+dist.toFixed(1)+'%';
+  // Gauge: fill = progress toward trigger (0% = current price, 100% = trigger)
+  // Use period low as the floor for gauge
+  const low=parseFloat((d.multi_timeframe?.['1h']||{}).period_low||dexP*0.8);
+  const range=sellTrig-low;
+  const progress=range>0?Math.max(0,Math.min(100,(dexP-low)/range*100)):0;
+  document.getElementById('gaugeFill').style.width=progress.toFixed(1)+'%';
+  document.getElementById('gCur').textContent='$'+dexP.toFixed(8);
+  document.getElementById('gTrig').textContent='Trigger $'+sellTrig.toFixed(8);
+ }
+}
+
+function renderSpark(daily,currentPrice){
+ const canvas=document.getElementById('spark');if(!daily||!daily.length)return;
+ const dpr=window.devicePixelRatio||1;
+ const W=canvas.parentElement.clientWidth;const H=90;
+ canvas.width=W*dpr;canvas.height=H*dpr;
+ canvas.style.width=W+'px';canvas.style.height=H+'px';
+ const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+ const prices=daily.map(x=>x.p);
+ const mn=Math.min(...prices),mx=Math.max(...prices);
+ const pad=4;
+ function px(i){return pad+(i/(prices.length-1))*(W-pad*2);}
+ function py(v){return H-pad-(v-mn)/(mx-mn||1)*(H-pad*2);}
+ // Fill gradient
+ const grad=ctx.createLinearGradient(0,0,0,H);
+ grad.addColorStop(0,'rgba(62,207,160,.25)');grad.addColorStop(1,'rgba(62,207,160,0)');
+ ctx.beginPath();ctx.moveTo(px(0),py(prices[0]));
+ prices.forEach((p,i)=>ctx.lineTo(px(i),py(p)));
+ ctx.lineTo(px(prices.length-1),H);ctx.lineTo(px(0),H);ctx.closePath();
+ ctx.fillStyle=grad;ctx.fill();
+ // Line
+ ctx.beginPath();ctx.moveTo(px(0),py(prices[0]));
+ prices.forEach((p,i)=>ctx.lineTo(px(i),py(p)));
+ ctx.strokeStyle='#3ecfa0';ctx.lineWidth=1.5;ctx.stroke();
+ // Current price dot
+ if(currentPrice>0&&currentPrice>=mn&&currentPrice<=mx){
+  ctx.beginPath();ctx.arc(px(prices.length-1),py(currentPrice),3,0,Math.PI*2);
+  ctx.fillStyle='#3ecfa0';ctx.fill();
+ }
+ // Labels
+ document.getElementById('sparkStart').textContent=daily[0]?.d||'';
+ document.getElementById('sparkMid').textContent=daily[Math.floor(daily.length/2)]?.d||'';
+ document.getElementById('sparkEnd').textContent=daily[daily.length-1]?.d||'';
+}
+
+function renderBreakeven(d){
+ const plans=d.plans||{};const p=plans.balanced||{};
+ const ms=d.market_snapshot||{};
+ if(!p.sell_tokens||!p.net_cash_usd)return;
+ const sellTok=parseFloat(p.sell_tokens.replace(/,/g,''));
+ const bbCost=parseFloat((p.buyback_cost_usd||'0').replace(/[^0-9.]/g,''));
+ const net=parseFloat((p.net_cash_usd||'0').replace(/[^0-9.]/g,''));
+ const gas=parseFloat((ms.gas_estimate_usd||'0').replace(/[^0-9.]/g,''));
+ const minGain=Math.ceil(parseFloat(p.buyback_tokens_estimate?.replace(/,/g,'')||0)-sellTok);
+ document.getElementById('beNote').textContent=
+  `Sell-vs-hold breakeven (Balanced): net proceeds $${net.toFixed(2)} must fund buyback of $${bbCost.toFixed(2)} (+gas). `+
+  `Minimum token gain to beat hold: +${minGain.toLocaleString()} tokens (${((minGain/sellTok)*100).toFixed(1)}% of sold tranche). `+
+  `Current plan shows buyback funded: ${p.buyback_funded?'YES':'NO — check blockers'}.`;
+}
+
+async function runCalc(){
+ const size=document.getElementById('calcSize').value;
+ const gas=document.getElementById('calcGas').value;
+ document.getElementById('cTotalCost').textContent='…';
+ try{
+  const r=await fetch(`/api/quote?size=${size}&gas=${gas}`);
+  const d=await r.json();
+  const q=d.quote||{};const checks=d.risk?.checks||{};
+  document.getElementById('cTotalCost').textContent='$'+(parseFloat(q.total_cost_usd)||0).toFixed(2);
+  const pct=(parseFloat(q.total_cost_usd)||0)/(parseFloat(size)||1)*100;
+  document.getElementById('cCostPct').textContent=pct.toFixed(2)+'%';
+  document.getElementById('cEntryImpact').textContent=(parseFloat(q.entry_impact_bps)||0).toFixed(1);
+  document.getElementById('cExitImpact').textContent=(parseFloat(q.exit_impact_bps)||0).toFixed(1);
+  document.getElementById('cBreakeven').textContent=pct.toFixed(2)+'% edge needed';
+  const sig=d.signal||'NO TRADE';
+  document.getElementById('cSignal').textContent=sig;
+  document.getElementById('cSignal').style.color=sig==='NO TRADE'?'var(--red)':'var(--mint)';
+  const blockers=(d.warnings||[]).map(w=>`<div class="warn" style="margin:3px 0;font-size:10px">${w}</div>`).join('');
+  document.getElementById('calcBlockers').innerHTML=blockers;
+ }catch(e){document.getElementById('cTotalCost').textContent='Error';}
+}
+
+function recalcBreakeven(){
+ const tokens=parseFloat(document.getElementById('ctrlTokens').value)||74683073;
+ const corePct=parseFloat(document.getElementById('ctrlCore').value)||50;
+ const tranchePct=parseFloat(document.getElementById('ctrlTranche').value)||15;
+ const lastPrice=parseFloat(document.getElementById('ctrlLastPrice').value)||0;
+ const tradable=tokens*(1-corePct/100);
+ const sellTok=tradable*(tranchePct/100);
+ const gasEst=20;
+ let note=`Tradable: ${tradable.toLocaleString(undefined,{maximumFractionDigits:0})} tokens. Sell tranche: ${sellTok.toLocaleString(undefined,{maximumFractionDigits:0})} tokens. `;
+ if(LIVE_PRICE>0){
+  const estProceeds=sellTok*LIVE_PRICE*(1-0.005);
+  const net=estProceeds-gasEst;
+  note+=`At current DEX price, est. gross: $${estProceeds.toFixed(2)}, net after gas: $${net.toFixed(2)}. `;
+  const minTokensToBreakeven=sellTok+(gasEst*2/LIVE_PRICE);
+  note+=`Must buy back >${minTokensToBreakeven.toLocaleString(undefined,{maximumFractionDigits:0})} tokens to beat hold after gas.`;
+ }
+ if(lastPrice>0&&LIVE_PRICE>0){
+  const chgFromLast=(LIVE_PRICE/lastPrice-1)*100;
+  note+=` Since last action price $${lastPrice.toFixed(8)}: ${chgFromLast>=0?'+':''}${chgFromLast.toFixed(1)}%.`;
+ }
+ document.getElementById('breakevenNote').textContent=note;
+}
+
+function renderWatch(d){
+ const plans=d.plans||{};const p=plans.balanced||plans.conservative||{};
+ const kl=d.key_levels||{};
+ document.getElementById('watchGrid').innerHTML=`
+  <div class="watch-card sell-zone"><div class="watch-label">Next Sell Watch <span class="est">EST</span></div><div class="watch-price" style="color:var(--orange)">${p.sell_trigger_price_usd||'—'}</div><div class="watch-label">+${p.tradable_pct?.replace('%','')||20}% from current DEX price</div></div>
+  <div class="watch-card buy-zone"><div class="watch-label">Next Buyback Watch <span class="est">EST</span></div><div class="watch-price" style="color:var(--mint)">${p.buyback_trigger_usd||'—'}</div><div class="watch-label">−25% from sell trigger</div></div>
+  <div class="watch-card inval-zone"><div class="watch-label">Bearish Invalidation <span class="est">EST</span></div><div class="watch-price" style="color:var(--red)">${kl.bearish_invalidation||'—'}</div><div class="watch-label">Reassess thesis below this</div></div>`;
+ const sd=document.getElementById('sellWatchDetail');
+ sd.innerHTML=[
+  ['Tokens to sell <span class="est">EST</span>',p.sell_tokens+' tokens'],
+  ['% of total holdings',p.sell_tokens_pct_total],
+  ['Sell zone',p.sell_zone_usd],['Nearest resistance',p.nearest_resistance_usd],
+  ['Est. gross <span class="est">EST</span>',p.estimated_sell_usd],['Gas',p.gas_usd],
+  ['Impact (bps) <span class="est">EST</span>',p.price_impact_entry_bps+' bps'],
+  ['Confirmation needed','2 closes above trigger + vol > avg'],['Cooldown',p.cooldown_hours+'h'],
+ ].map(([k,v])=>`<div class="row"><span class="row-key">${k}</span><span class="row-val">${v||'—'}</span></div>`).join('');
+ const bd=document.getElementById('buyWatchDetail');
+ bd.innerHTML=[
+  ['Buyback trigger <span class="est">EST</span>',p.buyback_trigger_usd],
+  ['Est. tokens <span class="est">EST</span>',p.buyback_tokens_estimate],
+  ['Buyback cost est. <span class="est">EST</span>','$'+p.buyback_cost_usd],
+  ['Funded from sale proceeds',p.buyback_funded?'YES ✓':'NO — CHECK BLOCKERS ⚠'],
+  ['Expected token gain <span class="est">EST</span>',p.expected_token_gain],
+  ['Max gas','$80'],['Confirmation needed','Holds above support 2+ candles'],
+ ].map(([k,v])=>`<div class="row"><span class="row-key">${k}</span><span class="row-val" style="color:${k.includes('Funded')&&v&&v.includes('NO')?'var(--red)':'inherit'}">${v||'—'}</span></div>`).join('');
+ const sh=d.multi_timeframe?.['1h']?.swing_highs||[];
+ const sl=d.multi_timeframe?.['1h']?.swing_lows||[];
+ const dexP=parseFloat((d.market_snapshot||{}).dex_price_usd||0);
+ const rows=[
+  ...(sh.slice(0,3).map(v=>({origin:'swing high',v:parseFloat(v)}))),
+  ...(sl.slice(0,3).map(v=>({origin:'swing low',v:parseFloat(v)}))),
+ ].sort((a,b)=>b.v-a.v).map(r=>({...r,
+  n:dexP>0?(r.v>dexP?'Resistance':'Support'):(r.origin==='swing high'?'Resistance':'Support'),
+  pos:dexP>0?(r.v>dexP?'▲ above':'▼ below'):'?',
+ }));
+ document.getElementById('levTable').innerHTML=rows.map(r=>`
+  <tr><td class="td">${r.n}</td><td class="td" style="font-family:monospace">$${r.v.toFixed(8)}</td>
+  <td class="td"><span class="est">EST</span></td>
+  <td class="td" style="color:var(--muted)">1H ${r.origin} · ${r.pos} current price</td></tr>
+ `).join('')||'<tr><td class="td" colspan="4" style="color:var(--muted)">No levels available</td></tr>';
+}
+
+function renderTF(mtf){
+ const keys=['daily','4h','1h','15m','5m'];const labels=['Daily','4H','1H','15M','5M'];
+ const roles=['Regime','Trend','Setup','Confirm','Execute'];
+ document.getElementById('tfGrid').innerHTML=keys.map((k,i)=>{
+  const tf=mtf[k]||{};if(tf.status==='no data')return`<div class="tf-card"><div class="tf-head"><span>${labels[i]}</span><span>${roles[i]}</span></div><div style="color:var(--muted);font-size:11px">No data</div></div>`;
+  const tr=tf.trend||'—';const tc=tr==='UP'?'up':tr==='DOWN'?'dn':'mx';
+  const rsi=tf.rsi;const rc=rsi>70?'var(--red)':rsi<30?'var(--mint)':'var(--text)';
+  const mom=parseFloat(tf.momentum_5bar||'0');
+  return`<div class="tf-card">
+   <div class="tf-head"><span>${labels[i]}</span><span style="font-size:9px;color:var(--muted)">${roles[i]}</span></div>
+   <div style="margin-bottom:6px"><span class="tag ${tc}">${tr}</span> <span style="color:${rc};font-size:11px;font-weight:700">RSI ${rsi||'—'}</span></div>
+   <div style="font-size:10px;color:var(--muted);line-height:1.8">
+    EMA9: <span style="color:var(--text)">${tf.ema9||'—'}</span><br>EMA21: ${tf.ema21||'—'}<br>EMA50: ${tf.ema50||'—'}<br>
+    ATR: ${tf.atr_pct||'—'}% <span class="est">EST</span><br>
+    Mom: <span style="color:${mom>=0?'var(--mint)':'var(--red)'}">${tf.momentum_5bar||'0.00%'}</span><br>
+    H: ${tf.period_high||'—'} / L: ${tf.period_low||'—'}
+   </div></div>`;
+ }).join('');
+}
+
+function renderChecks(checks){
+ document.getElementById('riskChecks').innerHTML=Object.entries(checks).map(([k,v])=>{
+  const cls=v==='PASS'?'chk-pass':v==='FAIL'?'chk-fail':'chk-unk';
+  return`<div class="chk"><span>${k.replace(/_/g,' ')}</span><span class="${cls}">${v}</span></div>`;
+ }).join('');
+}
+
+function renderPlans(plans){
+ const keys=['conservative','balanced','aggressive'];const classes=['cons','bal','agg'];
+ document.getElementById('planGrid').innerHTML=keys.map((k,i)=>{
+  const p=plans[k]||{};const dec=p.decision||'NO TRADE';
+  const dc=dec.includes('NO TRADE')?'var(--red)':dec.includes('WAIT')?'var(--amber)':'var(--orange)';
+  const blockers=(p.blockers||[]).map(b=>`<div class="warn" style="margin:3px 0;font-size:10px">${b}</div>`).join('');
+  const rows=[
+   ['Decision',`<b style="color:${dc}">${dec}</b>`],
+   ['Tradable',p.tradable_pct],['Sell portion',p.sell_portion_pct],
+   ['Tokens',p.sell_tokens+' <span class="est">EST</span>'],['% total',p.sell_tokens_pct_total],
+   ['Trigger',p.sell_trigger_price_usd+' <span class="est">EST</span>'],
+   ['Est. gross','$'+p.estimated_sell_usd+' <span class="est">EST</span>'],
+   ['Net cash',p.net_cash_usd+' <span class="est">EST</span>'],
+   ['Impact',p.price_impact_entry_bps+' bps <span class="est">EST</span>'],
+   ['Buyback trigger',p.buyback_trigger_usd+' <span class="est">EST</span>'],
+   ['Buyback cost','$'+p.buyback_cost_usd+' <span class="est">EST</span>'],
+   ['Funded',p.buyback_funded?'YES ✓':'NO ⚠'],
+   ['Token gain',p.expected_token_gain+' <span class="est">EST</span>'],
+   ['Cooldown',p.cooldown_hours+'h'],
+  ];
+  return`<div class="plan-card ${classes[i]}">
+   <div class="lbl">${p.label||k}</div>${blockers}
+   ${rows.map(([key,val])=>val?`<div class="row"><span class="row-key" style="font-size:10.5px">${key}</span><span class="row-val" style="font-size:10.5px">${val||'—'}</span></div>`:'').join('')}
+   <div style="margin-top:6px;font-size:9px;color:var(--muted)">RESEARCH ONLY · EXECUTION PRICE UNVERIFIED</div>
+  </div>`;
+ }).join('');
+}
+
+function setList(id,items){
+ document.getElementById(id).innerHTML=items.length?items.map(i=>`<li>${i}</li>`).join(''):'<li style="color:var(--muted)">None</li>';
+}
+function dClass(d){
+ if(d.includes('NO TRADE'))return'dec dec-no';if(d.includes('WAIT'))return'dec dec-wait';
+ if(d.includes('SELL'))return'dec dec-sell';if(d.includes('BUY'))return'dec dec-buy';return'dec dec-no';
+}
+function renderCmds(){
+ document.getElementById('cmdBlock').textContent=`# Start server (read-only, port 8765)
+cd /Users/haz/Desktop/H20
+python3 -m asteroid_scalper.server
+
+# Fetch full analysis (TV + on-chain, ~30s)
+curl http://127.0.0.1:8765/api/trade_plan
+
+# Quick live pool check
+curl http://127.0.0.1:8765/api/live
+
+# Calibrated signal stats (689-day history)
+curl http://127.0.0.1:8765/api/signal_stats
+
+# Cached plan (instant)
+curl http://127.0.0.1:8765/api/cached_plan
+
+# Round-trip cost calculator
+curl "http://127.0.0.1:8765/api/quote?size=500&gas=20"
+
+# Stop server
+kill $(lsof -ti:8765)`;
+}
+// Nav
+document.querySelectorAll('[data-page]').forEach(a=>{
+ a.addEventListener('click',e=>{
+  e.preventDefault();
+  document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  a.classList.add('active');document.getElementById(a.dataset.page).classList.add('active');
+ });
+});
+function show(id){document.getElementById(id).style.display='flex';}
+function hide(id){document.getElementById(id).style.display='none';}
+// Boot
+(async()=>{
+ await fetchLive();
+ try{const r=await fetch('/api/cached_plan');if(r.ok){const d=await r.json();if(!d.error){D=d;renderAll(d);return;}}}catch(_){}
+ fetchPlan();
+})();
+</script>
+</body>
+</html>
