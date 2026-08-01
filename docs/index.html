@@ -45,6 +45,7 @@ main{padding:18px 22px;max-width:1520px;width:100%;margin:auto}
 .est{color:var(--amber);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 .inf{color:var(--blue);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 .unk{color:var(--muted);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.cfg{color:#c89cff;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 /* Rows */
 .row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #14202e;font-size:11.5px}
 .row:last-child{border:0}.row-key{color:var(--muted)}.row-val{text-align:right;font-weight:500}
@@ -229,17 +230,17 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
     </div>
    </div>
    <div class="idea-stats" id="ideaStats">
-    <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px">Historical Hit Rates</div>
-    <div class="stat-row"><span class="stat-key">Sell pumps</span><span class="stat-val" id="iSellHit" style="color:var(--mint)">—</span></div>
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px">Descriptive Raw-Signal Study</div>
+    <div class="stat-row"><span class="stat-key">Pump fades</span><span class="stat-val" id="iSellHit" style="color:var(--amber)">—</span></div>
     <div class="stat-row"><span class="stat-key">n</span><span class="stat-val" id="iSellN" style="color:var(--muted)">—</span></div>
     <div class="stat-row"><span class="stat-key">Med. 14d return</span><span class="stat-val" id="iSellMed" style="color:var(--muted)">—</span></div>
     <div style="height:8px"></div>
-    <div class="stat-row"><span class="stat-key">Buy dips</span><span class="stat-val" id="iDipHit" style="color:var(--red)">—</span></div>
+    <div class="stat-row"><span class="stat-key">Dip recoveries</span><span class="stat-val" id="iDipHit" style="color:var(--red)">—</span></div>
     <div class="stat-row"><span class="stat-key">n</span><span class="stat-val" id="iDipN" style="color:var(--muted)">—</span></div>
     <div class="stat-row"><span class="stat-key">Med. 30d return</span><span class="stat-val" id="iDipMed" style="color:var(--muted)">—</span></div>
     <div style="height:8px;border-top:1px solid var(--line);margin-top:4px;padding-top:4px"></div>
-    <div style="font-size:9px;color:var(--muted)">Source: 689-day on-chain history</div>
-    <div style="font-size:9px;color:var(--amber)">Not walk-forward validated</div>
+    <div style="font-size:9px;color:var(--muted)">SIGNAL-689-V1 · raw, overlapping signals</div>
+    <div style="font-size:9px;color:var(--amber)">Not a probability or decision input</div>
    </div>
   </div>
 
@@ -260,7 +261,7 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
    <article class="card s4">
     <div class="lbl">Your Position</div>
     <div class="big" id="posVal">—</div>
-    <div class="sub">74,683,073 ASTEROID <span class="est">EST</span></div>
+    <div class="sub">74,683,073 ASTEROID <span class="cfg">CFG</span></div>
     <div style="margin-top:10px">
      <div class="row"><span class="row-key">Core (50% cfg)</span><span class="row-val">37,341,537</span></div>
      <div class="row"><span class="row-key">Tradable (50%)</span><span class="row-val pos">37,341,536</span></div>
@@ -285,10 +286,10 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
    <article class="card s3"><div class="lbl">7D / 30D Returns <span class="obs">OBS</span></div><div class="big" id="ret7d" style="font-size:16px">—</div><div class="sub" id="ret30d">30D: —</div></article>
   </div>
 
-  <!-- 180-day sparkline -->
+  <!-- 61-day reconstructed sparkline -->
   <div class="grid">
    <article class="card s12">
-    <div class="lbl">180-Day Price History <span class="obs">OBS</span> <span style="font-size:9px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">· from on-chain Sync events</span></div>
+    <div class="lbl">61-Day Reconstructed Price History <span class="obs">OBS</span> <span style="font-size:9px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">· REPLAY-61-V1 · on-chain Sync events</span></div>
     <div class="spark-wrap"><canvas id="spark"></canvas></div>
     <div class="spark-labels"><span id="sparkStart">—</span><span id="sparkMid">—</span><span id="sparkEnd">—</span></div>
    </article>
@@ -313,11 +314,11 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
 
  <!-- ═══ WATCH LEVELS ═══ -->
  <section id="watch" class="page">
-  <div class="lbl" style="margin-bottom:10px">Actionable Watch Levels — active even during NO TRADE</div>
+  <div class="lbl" style="margin-bottom:10px">Reference Watch Levels — shown only when live data is valid</div>
   <div class="warn">Research levels only. No execution should occur without full plan review and manual confirmation.</div>
   <div class="watch-grid" style="margin-bottom:12px" id="watchGrid">
    <div class="watch-card sell-zone"><div class="watch-label">Next Sell Watch</div><div class="watch-price" style="color:var(--orange)">—</div><div class="watch-label">Bag Builder trigger</div></div>
-   <div class="watch-card buy-zone"><div class="watch-label">Next Buyback Watch</div><div class="watch-price" style="color:var(--mint)">—</div><div class="watch-label">−25% from sell price</div></div>
+   <div class="watch-card buy-zone"><div class="watch-label">Candidate Buyback Zone</div><div class="watch-price" style="color:var(--mint)">—</div><div class="watch-label">Independent reversal confirmation required</div></div>
    <div class="watch-card inval-zone"><div class="watch-label">Bearish Invalidation</div><div class="watch-price" style="color:var(--red)">—</div><div class="watch-label">Reassess entire thesis</div></div>
   </div>
   <div class="grid">
@@ -358,7 +359,7 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
   <div class="port-grid">
    <div class="port-card hold">
     <div class="lbl">Buy-and-Hold Benchmark</div>
-    <div class="row"><span class="row-key">Tokens held</span><span class="row-val" style="color:var(--mint)">74,683,073 <span class="obs">OBS</span></span></div>
+    <div class="row"><span class="row-key">Tokens held</span><span class="row-val">74,683,073 <span class="cfg">CFG</span></span></div>
     <div class="row"><span class="row-key">Current value</span><span class="row-val" id="holdVal">—</span></div>
     <div class="row"><span class="row-key">Entry price (est.)</span><span class="row-val" style="color:var(--amber)">$0.00015421 <span class="est">EST</span></span></div>
     <div class="row"><span class="row-key">Cost-basis source</span><span class="row-val" style="color:var(--amber)">Inherited estimate · no tax lots</span></div>
@@ -419,6 +420,10 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
     <div id="missedReview" style="font-size:11px;color:var(--muted);line-height:1.7">Loading…</div>
    </article>
    <article class="card s12">
+    <div class="lbl">Paper Scheduler Heartbeat</div>
+    <div id="agHeartbeat" style="font-size:11px;color:var(--muted);line-height:1.7">Loading…</div>
+   </article>
+   <article class="card s12">
     <div class="lbl">Aggressive Paper Ledger — most recent actions</div>
     <table><thead><tr><th class="th">Time</th><th class="th">Side</th><th class="th">Tokens</th><th class="th">Cash</th><th class="th">Fill</th><th class="th">Gas</th><th class="th">Impact</th><th class="th">Reason</th></tr></thead>
     <tbody id="agLedger"><tr><td class="td" colspan="8" style="color:var(--muted)">No paper actions yet.</td></tr></tbody></table>
@@ -439,20 +444,20 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
   <!-- Historical edge -->
   <div class="grid">
    <article class="card s12">
-    <div class="lbl">Calibrated Historical Signal Hit Rates <span class="obs">OBS</span> — 689-day on-chain history</div>
-    <div class="warn" style="margin-bottom:10px">Not walk-forward validated. Regime bias, duplicate signals, and gas not yet stripped. Use as directional evidence, not a probability.</div>
+    <div class="lbl">Descriptive Raw-Signal Study <span class="est">PRE-VALIDATION</span> — SIGNAL-689-V1</div>
+    <div class="warn" style="margin-bottom:10px">Raw signals may overlap and have not been clustered into independent episodes or tested out of sample. These percentages are descriptive observations—not probabilities, calibrated edge, or trade justification.</div>
     <div class="edge-grid" id="edgeGrid">
      <div class="edge-card strong">
       <div class="edge-pct" style="color:var(--mint)" id="eSellPct">—%</div>
       <div class="edge-n" id="eSellN">n=—</div>
-      <div style="font-weight:700;margin-bottom:4px;font-size:12px">Sell Pumps</div>
+      <div style="font-weight:700;margin-bottom:4px;font-size:12px">Pump Fade Study</div>
       <div class="edge-plain" id="eSellPlain">—</div>
       <div class="edge-honest" style="color:var(--mint)" id="eSellHonest">—</div>
      </div>
      <div class="edge-card weak">
       <div class="edge-pct" style="color:var(--red)" id="eDipPct">—%</div>
       <div class="edge-n" id="eDipN">n=—</div>
-      <div style="font-weight:700;margin-bottom:4px;font-size:12px">Buy Dips</div>
+      <div style="font-weight:700;margin-bottom:4px;font-size:12px">Dip Recovery Study</div>
       <div class="edge-plain" id="eDipPlain">—</div>
       <div class="edge-honest" style="color:var(--red)" id="eDipHonest">—</div>
      </div>
@@ -564,7 +569,7 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
     <div class="row"><span class="row-key">Missing swaps</span><span class="row-val pos">0</span></div>
     <div class="row"><span class="row-key">History span</span><span class="row-val" style="color:var(--mint)">2026-05-31 → 2026-07-30 <span class="obs">OBS</span></span></div>
     <div class="row"><span class="row-key">Pool addresses verified</span><span class="row-val pos">Yes — 4/4 RPCs agree</span></div>
-    <div class="row"><span class="row-key">Token contract</span><span class="row-val" style="font-size:10px;font-family:monospace;color:var(--mint)">0xf280b16e… <span class="obs">OBS</span></span></div>
+    <div class="row"><span class="row-key">Token contract</span><span class="row-val" style="font-size:10px;font-family:monospace;color:var(--mint)">0xf280b16ef293d8e534e370794ef26bf312694126 <span class="obs">OBS</span></span></div>
    </article>
    <article class="card s6">
     <div class="lbl">Live Data Status</div>
@@ -576,6 +581,10 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
     <div class="row"><span class="row-key">TV/DEX gap</span><span class="row-val" id="hGap">—</span></div>
     <div class="row"><span class="row-key">ETH/USD <span class="inf">INF</span></span><span class="row-val" id="hEth">—</span></div>
     <div class="row"><span class="row-key">Market identity verified</span><span class="row-val" id="hVerif">—</span></div>
+   </article>
+   <article class="card s12">
+    <div class="lbl">Source Diagnostics — latest refresh attempt</div>
+    <div id="sourceDiagnostics" style="font-size:11px;color:var(--muted);line-height:1.7">Waiting for live source checks…</div>
    </article>
    <article class="card s12">
     <div class="lbl">Known Limitations</div>
@@ -610,10 +619,20 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
     </tbody></table>
    </article>
    <article class="card s12">
+    <div class="lbl">SIGNAL-689-V1 Provenance — incomplete audit</div>
+    <div class="warn">This dataset is descriptive research only. It is excluded from current decision eligibility and must not be compared directly with live watch levels.</div>
+    <div class="row"><span class="row-key">Chain</span><span class="row-val">Ethereum Mainnet <span class="obs">OBS</span></span></div>
+    <div class="row"><span class="row-key">Pool</span><span class="row-val" style="font-family:monospace;font-size:10px">0x76a411f14a704099ba476ce8dffc288a53295218 <span class="obs">OBS</span></span></div>
+    <div class="row"><span class="row-key">First / last block</span><span class="row-val">Not published in current artifact <span class="unk">UNK</span></span></div>
+    <div class="row"><span class="row-key">Active / zero-volume days</span><span class="row-val">Not audited <span class="unk">UNK</span></span></div>
+    <div class="row"><span class="row-key">Pool migrations / discontinuities</span><span class="row-val">Unknown; no adjustment claim made <span class="unk">UNK</span></span></div>
+    <div class="row"><span class="row-key">Signal independence</span><span class="row-val">Raw observations overlap; independent episodes not established <span class="unk">UNK</span></span></div>
+   </article>
+   <article class="card s12">
     <div class="lbl">Evidence Ladder</div>
     <div class="method-step"><div class="method-num">1</div><div class="method-body"><h4>On-chain Observation <span class="obs">OBS</span></h4><p>Pool reserves from 4 independent RPC providers, block-level agreement check. This is the only data layer with no interpretation.</p></div></div>
     <div class="method-step"><div class="method-num">2</div><div class="method-body"><h4>Historical Replay <span class="obs">OBS</span></h4><p>138,226 Sync events, 100% coverage, 61 days. Reserve state at each block reconstructed exactly. Price and liquidity at each swap are observed, not modeled.</p></div></div>
-    <div class="method-step"><div class="method-num">3</div><div class="method-body"><h4>Signal Statistics <span class="obs">OBS</span> / <span class="unk">NOT WALK-FORWARD</span></h4><p>78 pump signals: 78% faded within 14 days. 217 dip signals: 13% recovered within 30 days. Computed from full history but not validated out-of-sample.</p></div></div>
+    <div class="method-step"><div class="method-num">3</div><div class="method-body"><h4>Descriptive Signal Study <span class="est">PRE-VALIDATION</span> / <span class="unk">NOT WALK-FORWARD</span></h4><p>Raw overlapping observations: 78 pump-fade candidates and 217 dip-recovery candidates. Independence, provenance completeness, and out-of-sample performance are not established; this layer is excluded from decisions.</p></div></div>
     <div class="method-step"><div class="method-num">4</div><div class="method-body"><h4>Multi-TF Technical Analysis <span class="est">EST</span></h4><p>EMA, RSI, MACD, Bollinger, swing highs/lows derived from TV 5M bars. Regime classification from EMA alignment across Daily/4H/1H. Volume data unavailable from TV for this pair.</p></div></div>
     <div class="method-step"><div class="method-num">5</div><div class="method-body"><h4>Simulation <span class="est">EST</span></h4><p>Bag Builder strategy replayed against historical swaps. ETH/USD fixed at $1,883. Gas estimated. Price impact estimated. Not a real performance record.</p></div></div>
     <div class="method-step"><div class="method-num">6</div><div class="method-body"><h4>Paper Trading <span class="est">EST</span></h4><p>No live trades placed. Paper account tracks hypothetical entries/exits for comparison against hold. Not a verified track record.</p></div></div>
@@ -669,9 +688,9 @@ function setDataLock(valid,reason=''){
  if(!valid){
   ob.textContent='DATA INVALID — NO DECISION AVAILABLE. '+DATA_REASON+' Cached plans and watch levels are historical reference only.';
   ob.style.display='block';
-  const b=document.getElementById('decBadge');if(b){b.textContent='BLOCKED — DATA INVALID';b.className='dec dec-no';}
-  const ib=document.getElementById('ideaBadge');if(ib){ib.textContent='BLOCKED';ib.className='idea-badge no';}
-  const c=document.getElementById('conclusion');if(c)c.textContent='No current decision is available until critical market inputs pass freshness and agreement gates.';
+  const b=document.getElementById('decBadge');if(b){b.textContent='NOT EVALUATED';b.className='dec dec-no';}
+  const ib=document.getElementById('ideaBadge');if(ib){ib.textContent='NOT EVALUATED';ib.className='idea-badge no';}
+  const c=document.getElementById('conclusion');if(c)c.textContent='No decision was evaluated. Critical market inputs must pass freshness and agreement gates first.';
  }else if(connected){ob.style.display='none';}
 }
 
@@ -692,6 +711,9 @@ async function fetchLive(){
   if(!(p>0))reasons.push('DEX price unavailable');
   if(!(ethUsdNow>0))reasons.push('ETH/USD inference unavailable');
   const valid=reasons.length===0;
+  const providerErrors=(d.errors||[]).map(x=>(x.provider||'provider')+': '+(x.error||'unknown error'));
+  const diag=document.getElementById('sourceDiagnostics');
+  if(diag)diag.innerHTML=`<b>Ethereum RPC:</b> ${ok}/4 responded; agreement ${ag?'PASS':'FAIL'}<br><b>DEX price:</b> ${p>0?'available':'missing'}<br><b>ETH/USD inference:</b> ${ethUsdNow>0?'available':'missing'}<br><b>Snapshot age:</b> ${Math.round(wallAge)} seconds<br><b>Decision effect:</b> ${valid?'eligible for evaluation':'NOT EVALUATED — '+reasons.join('; ')}${providerErrors.length?'<br><b>Provider errors:</b> '+providerErrors.join(' | '):''}`;
   setConn(valid?(ok>=4?'live':'degraded'):'offline');
   setDataLock(valid,reasons.join('; '));
   if(p>0){
@@ -722,7 +744,7 @@ async function fetchLive(){
   document.getElementById('rpcVal').textContent=ok+'/4';
   document.getElementById('rpcDetail').textContent=ag?'All block hashes match':'RPC disagreement detected';
   document.getElementById('tsAge').textContent='Pool age: '+Math.round(wallAge)+'s'+(wallAge>120?' · STALE WARNING':'');
- }catch(e){setConn('offline');setDataLock(false,'market snapshot failed to load or timed out');}
+ }catch(e){setConn('offline');setDataLock(false,'market snapshot failed to load or timed out');const diag=document.getElementById('sourceDiagnostics');if(diag)diag.textContent='Live snapshot request failed: '+(e?.message||'unknown error')+'. Decision was NOT EVALUATED.';}
 }
 
 async function fetchPlan(){
@@ -768,6 +790,14 @@ function renderPaper(p){
  document.getElementById('agUpdated').textContent=p.updated_at?new Date(p.updated_at).toLocaleString():'—';
  document.getElementById('agBlock').textContent=p.last_source_block?Number(p.last_source_block).toLocaleString():'—';
  document.getElementById('agVersion').textContent=(p.config_hash||'—')+' / '+(p.code_commit||'—');
+ const evalAll=p.evaluation_ledger||[];const latest=evalAll.length?evalAll[evalAll.length-1]:null;
+ const completed=latest?.completed_at?new Date(latest.completed_at):null;
+ const started=latest?.started_at?new Date(latest.started_at):null;
+ const expected=completed?new Date(completed.getTime()+5*60*1000):null;
+ const todayKey=new Date().toISOString().slice(0,10);
+ const runsToday=evalAll.filter(x=>(x.completed_at||'').slice(0,10)===todayKey).length;
+ const delay=completed&&started?Math.max(0,Math.round((completed-started)/1000)):null;
+ const hb=document.getElementById('agHeartbeat');if(hb)hb.innerHTML=`<b>Engine:</b> ${paperStale?'OFFLINE / STALE':'ONLINE SNAPSHOT'}<br><b>Last scheduler start:</b> ${started?started.toLocaleString():'unavailable'}<br><b>Last successful evaluation:</b> ${completed?completed.toLocaleString():'unavailable'}<br><b>Expected next run:</b> ${expected?expected.toLocaleString():'unavailable'} (GitHub may delay or skip)<br><b>Runs completed today:</b> ${runsToday}<br><b>Evaluation duration:</b> ${delay===null?'unavailable':delay+' seconds'}<br><b>Scheduled-at timestamp:</b> ${latest?.scheduled_at?new Date(latest.scheduled_at).toLocaleString():'not supplied by GitHub Actions'}`;
  const levels=(p.buyback_levels||[]).map(x=>`${x.filled?'✓':'○'} -${(n(x.drop_pct)*100).toFixed(0)}% @ $${n(x.trigger_price).toFixed(8)}`).join('<br>');
  const blockers=(p.blockers||[]).length?(p.blockers||[]).map(x=>'⚠ '+x.replaceAll('_',' ')).join('<br>'):'✓ All current risk gates clear';
  document.getElementById('agCycle').innerHTML=`<b>State:</b> ${state}<br><b>Paper age:</b> ${isFinite(paperAge)?Math.round(paperAge/60)+' minutes':'unavailable'}<br><b>Core floor:</b> ${tok(p.core_floor_tokens)} tokens<br><b>Average sell:</b> ${n(p.average_sell_price)>0?'$'+n(p.average_sell_price).toFixed(8):'—'}<br>${levels||'<b>Buybacks:</b> none open'}<br><br>${paperStale?'⚠ paper engine older than 20 minutes<br>':''}${blockers}`;
@@ -776,7 +806,7 @@ function renderPaper(p){
  const ledger=(p.ledger||[]).slice().reverse().slice(0,20);
  document.getElementById('agLedger').innerHTML=ledger.length?ledger.map(x=>`<tr><td class="td">${new Date(x.fill_time).toLocaleString()}</td><td class="td" style="color:${x.side==='SELL'?'var(--red)':'var(--mint)'}">${x.side}</td><td class="td">${tok(x.tokens)}</td><td class="td">${usd(x.cash_usd)}</td><td class="td">$${n(x.simulated_fill_price).toFixed(8)}</td><td class="td">${usd(x.gas_usd)}</td><td class="td">${n(x.price_impact_bps).toFixed(1)} bps</td><td class="td">${(x.reason||[]).join(', ')}</td></tr>`).join(''):'<tr><td class="td" colspan="8" style="color:var(--muted)">No qualified paper actions yet. The engine is observing and preserving its state.</td></tr>';
  const evals=(p.evaluation_ledger||[]).slice().reverse().slice(0,30);
- document.getElementById('agEvaluations').innerHTML=evals.length?evals.map(x=>`<tr><td class="td">${new Date(x.completed_at).toLocaleString()}</td><td class="td">${Number(x.source_block||0).toLocaleString()}</td><td class="td">${x.data_status}</td><td class="td">${x.signal_status}</td><td class="td">${x.risk_status}</td><td class="td">${x.decision}</td><td class="td">${(x.reason_codes||[]).join(', ')}</td></tr>`).join(''):'<tr><td class="td" colspan="7" style="color:var(--muted)">No completed evaluations published.</td></tr>';
+ document.getElementById('agEvaluations').innerHTML=evals.length?evals.map(x=>`<tr><td class="td">${new Date(x.completed_at).toLocaleString()}</td><td class="td">${Number(x.source_block||0).toLocaleString()}</td><td class="td">${x.data_status}</td><td class="td">${x.signal_status}</td><td class="td">${x.risk_status}</td><td class="td">${x.decision}</td><td class="td">${(x.reason_codes||[]).join(', ')}${x.prior_state||x.new_state?'<br>'+String(x.prior_state||'?')+' → '+String(x.new_state||'?'):''}</td></tr>`).join(''):'<tr><td class="td" colspan="7" style="color:var(--muted)">No completed evaluations published.</td></tr>';
 }
 
 function renderAll(d){
@@ -843,9 +873,8 @@ function renderAll(d){
  // Honest read
  if(css.asymmetric_summary){
   document.getElementById('honestText').textContent=
-   'This terminal\'s 689-day history shows a decisive asymmetry. '+css.pump_sell?.plain+' '+css.dip_buy?.plain+
-   ' The Bag Builder strategy is designed to exploit the sell side of this asymmetry — not the buy side.';
-  document.getElementById('honestAsym').textContent=css.asymmetric_summary;
+   'The 689-day dataset contains raw, overlapping signal observations with different descriptive outcomes. They have not been de-duplicated into independent episodes or validated out of sample, and they are excluded from decision eligibility.';
+  document.getElementById('honestAsym').textContent='Research observation only — not a calibrated edge or trading probability.';
   document.getElementById('honestRead').style.display='block';
  }
 
@@ -1041,7 +1070,7 @@ function renderWatch(d){
  const kl=d.key_levels||{};
  document.getElementById('watchGrid').innerHTML=`
   <div class="watch-card sell-zone"><div class="watch-label">Next Sell Watch <span class="est">EST</span></div><div class="watch-price" style="color:var(--orange)">${p.sell_trigger_price_usd||'—'}</div><div class="watch-label">+${p.tradable_pct?.replace('%','')||20}% from current DEX price</div></div>
-  <div class="watch-card buy-zone"><div class="watch-label">Next Buyback Watch <span class="est">EST</span></div><div class="watch-price" style="color:var(--mint)">${p.buyback_trigger_usd||'—'}</div><div class="watch-label">−25% from sell trigger</div></div>
+  <div class="watch-card buy-zone"><div class="watch-label">Candidate Buyback Zone <span class="est">EST</span></div><div class="watch-price" style="color:var(--mint)">${p.buyback_trigger_usd||'—'}</div><div class="watch-label">Independent reversal confirmation required</div></div>
   <div class="watch-card inval-zone"><div class="watch-label">Bearish Invalidation <span class="est">EST</span></div><div class="watch-price" style="color:var(--red)">${kl.bearish_invalidation||'—'}</div><div class="watch-label">Reassess thesis below this</div></div>`;
  const sd=document.getElementById('sellWatchDetail');
  sd.innerHTML=[
@@ -1059,7 +1088,7 @@ function renderWatch(d){
   ['Buyback cost est. <span class="est">EST</span>','$'+p.buyback_cost_usd],
   ['Funded from sale proceeds',p.buyback_funded?'YES ✓':'NO — CHECK BLOCKERS ⚠'],
   ['Expected token gain <span class="est">EST</span>',p.expected_token_gain],
-  ['Max gas','$80'],['Confirmation needed','Holds above support 2+ candles'],
+  ['Max gas','$80'],['Confirmation needed','Independent reversal + holds above support 2+ candles'],
  ].map(([k,v])=>`<div class="row"><span class="row-key">${k}</span><span class="row-val" style="color:${k.includes('Funded')&&v&&v.includes('NO')?'var(--red)':'inherit'}">${v||'—'}</span></div>`).join('');
  const sh=d.multi_timeframe?.['1h']?.swing_highs||[];
  const sl=d.multi_timeframe?.['1h']?.swing_lows||[];
