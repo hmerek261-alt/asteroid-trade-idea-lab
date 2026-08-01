@@ -161,6 +161,8 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
 .spin{display:inline-block;width:26px;height:26px;border:2.5px solid var(--line);border-top-color:var(--mint);border-radius:50%;animation:sp .75s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 #offlineBanner{display:none;background:#1c0a0a;border:1px solid #5c1520;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--red);font-weight:700}
+.data-locked #watch .grid,.data-locked #command .plan-grid{opacity:.28;filter:grayscale(1);pointer-events:none}
+.data-locked #watch>.lbl::after{content:" — HISTORICAL REFERENCE ONLY";color:var(--red)}
 .breakeven-note{font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.6;font-style:italic}
 @media(max-width:920px){.shell{display:block}aside{position:relative;height:auto}.tf-grid,.plan-grid,.port-grid,.watch-grid,.checks-compact,.edge-grid,.calc-result,.ctrl-grid{grid-template-columns:1fr 1fr}.s12,.s9,.s8,.s7,.s6,.s5,.s4,.s3,.s2{grid-column:1/-1}.idea-card{grid-template-columns:1fr}.idea-stats{text-align:left}}
 </style>
@@ -195,7 +197,7 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
   <div class="pills"><span class="pill red">NO SIGNER</span><span class="pill amber">RESEARCH ONLY</span></div>
  </div>
 
- <div id="offlineBanner">⚠ OFFLINE SNAPSHOT — server not responding. Showing last cached state. Pool price and liquidity shown below are from the last successful connection.</div>
+ <div id="offlineBanner">DATA INVALID — NO DECISION AVAILABLE. Cached values are historical reference only.</div>
 
  <div class="refresh">
   <button class="btn btn-p" onclick="fetchPlan()">Refresh Analysis</button>
@@ -262,8 +264,8 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
     <div style="margin-top:10px">
      <div class="row"><span class="row-key">Core (50% cfg)</span><span class="row-val">37,341,537</span></div>
      <div class="row"><span class="row-key">Tradable (50%)</span><span class="row-val pos">37,341,536</span></div>
-     <div class="row"><span class="row-key">Core (70% cfg)</span><span class="row-val">22,404,922</span></div>
-     <div class="row"><span class="row-key">Tradable (70%)</span><span class="row-val pos">52,278,151</span></div>
+     <div class="row"><span class="row-key">Core (30% in 70%-tradable cfg)</span><span class="row-val">22,404,922</span></div>
+     <div class="row"><span class="row-key">Tradable (70% cfg)</span><span class="row-val pos">52,278,151</span></div>
      <div class="row"><span class="row-key">External deposits</span><span class="row-val" style="color:var(--muted)">$0 — none approved</span></div>
     </div>
    </article>
@@ -359,6 +361,7 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
     <div class="row"><span class="row-key">Tokens held</span><span class="row-val" style="color:var(--mint)">74,683,073 <span class="obs">OBS</span></span></div>
     <div class="row"><span class="row-key">Current value</span><span class="row-val" id="holdVal">—</span></div>
     <div class="row"><span class="row-key">Entry price (est.)</span><span class="row-val" style="color:var(--amber)">$0.00015421 <span class="est">EST</span></span></div>
+    <div class="row"><span class="row-key">Cost-basis source</span><span class="row-val" style="color:var(--amber)">Inherited estimate · no tax lots</span></div>
     <div class="row"><span class="row-key">Entry value</span><span class="row-val" style="color:var(--amber)">$11,514.67 <span class="est">EST</span></span></div>
     <div class="row"><span class="row-key">Change vs entry</span><span class="row-val" id="holdChg">—</span></div>
     <div class="row"><span class="row-key">Decline from entry <span class="est">EST</span></span><span class="row-val neg" id="holdDrawdown">—</span></div>
@@ -390,7 +393,8 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
     <div class="row"><span class="row-key">vs Hold</span><span class="row-val" id="p70vsHold">Waiting for first trade</span></div>
    </div>
    <div class="port-card aggressive">
-    <div class="lbl">Aggressive Pump Recycler <span class="est">PAPER</span></div>
+    <div class="lbl">Experimental Signal Recorder <span class="est">EDGE UNCONFIRMED</span></div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:6px">Aggressive Pump Recycler v1 · paper only</div>
     <div class="row"><span class="row-key">Engine state</span><span class="row-val" id="agState">Loading…</span></div>
     <div class="row"><span class="row-key">Tokens held</span><span class="row-val" id="agTokens">—</span></div>
     <div class="row"><span class="row-key">Cash reserve</span><span class="row-val" id="agCash">—</span></div>
@@ -400,7 +404,9 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
     <div class="row"><span class="row-key">Actions / cycles</span><span class="row-val" id="agActions">—</span></div>
     <div class="row"><span class="row-key">Gas + fees</span><span class="row-val" id="agCosts">—</span></div>
     <div class="row"><span class="row-key">Last evaluation</span><span class="row-val" id="agUpdated">—</span></div>
-    <div style="margin-top:8px;font-size:10px;color:var(--muted)">Evaluated every 5 minutes by GitHub. No signer or execution path.</div>
+    <div class="row"><span class="row-key">Source block</span><span class="row-val" id="agBlock">—</span></div>
+    <div class="row"><span class="row-key">Config / commit</span><span class="row-val" id="agVersion">—</span></div>
+    <div style="margin-top:8px;font-size:10px;color:var(--muted)">Scheduled approximately every five minutes. GitHub runs may be delayed or skipped. No signer or execution path.</div>
    </div>
   </div>
   <div class="grid" style="margin-top:10px">
@@ -416,6 +422,11 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
     <div class="lbl">Aggressive Paper Ledger — most recent actions</div>
     <table><thead><tr><th class="th">Time</th><th class="th">Side</th><th class="th">Tokens</th><th class="th">Cash</th><th class="th">Fill</th><th class="th">Gas</th><th class="th">Impact</th><th class="th">Reason</th></tr></thead>
     <tbody id="agLedger"><tr><td class="td" colspan="8" style="color:var(--muted)">No paper actions yet.</td></tr></tbody></table>
+   </article>
+   <article class="card s12">
+    <div class="lbl">Evaluation Audit — every completed engine decision</div>
+    <table><thead><tr><th class="th">Completed</th><th class="th">Block</th><th class="th">Data</th><th class="th">Signal</th><th class="th">Risk</th><th class="th">Decision</th><th class="th">Reasons</th></tr></thead>
+    <tbody id="agEvaluations"><tr><td class="td" colspan="7" style="color:var(--muted)">No evaluations published.</td></tr></tbody></table>
    </article>
   </div>
   <div class="warn" style="margin-top:10px">Pool reserves for the 2-month window are fully reconstructed (138,226 Sync events, 100% coverage). Still missing: ETH/USD per swap, gas receipts per block, and price impact at execution time. All simulation results are estimated.</div>
@@ -464,7 +475,7 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
    </article>
    <article class="card s6">
     <div class="lbl">Why Zero Trades</div>
-    <p style="font-size:11.5px;color:var(--muted);line-height:1.7">The 2-month period did not produce a +40% pump from any anchor price within the cooldown window. The Bag Builder correctly abstained. Lowering the pump threshold to 15–20% would have triggered trades, but increases false positives and needs calibration against more data.</p>
+    <p style="font-size:11.5px;color:var(--muted);line-height:1.7">No trades were generated under this configuration during the two-month period. This does not establish that abstention was optimal. Lower thresholds produced more candidate events but require locked out-of-sample testing before comparison.</p>
    </article>
    <article class="card s6">
     <div class="lbl">Before Trusting Results</div>
@@ -591,6 +602,14 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
   <div class="lbl" style="margin-bottom:12px">What This Tool Is — and Is Not</div>
   <div class="grid">
    <article class="card s12">
+    <div class="lbl">Dataset Registry</div>
+    <table><thead><tr><th class="th">Dataset ID</th><th class="th">Period</th><th class="th">Resolution</th><th class="th">Purpose</th><th class="th">Primary limitation</th></tr></thead><tbody>
+     <tr><td class="td">SIGNAL-689-V1</td><td class="td">689 days</td><td class="td">Derived signals</td><td class="td">Pump/dip descriptive statistics</td><td class="td">Not walk-forward; 78 raw signals are not independent-event probabilities</td></tr>
+     <tr><td class="td">REPLAY-61-V1</td><td class="td">61 days</td><td class="td">Sync/Swap events</td><td class="td">Historical reserve replay</td><td class="td">Historical ETH/USD and exact gas remain provisional</td></tr>
+     <tr><td class="td">PAPER-LIVE-V1</td><td class="td">Since launch</td><td class="td">Scheduled snapshots</td><td class="td">Forward paper evaluation</td><td class="td">GitHub scheduling may be delayed; not sub-minute execution</td></tr>
+    </tbody></table>
+   </article>
+   <article class="card s12">
     <div class="lbl">Evidence Ladder</div>
     <div class="method-step"><div class="method-num">1</div><div class="method-body"><h4>On-chain Observation <span class="obs">OBS</span></h4><p>Pool reserves from 4 independent RPC providers, block-level agreement check. This is the only data layer with no interpretation.</p></div></div>
     <div class="method-step"><div class="method-num">2</div><div class="method-body"><h4>Historical Replay <span class="obs">OBS</span></h4><p>138,226 Sync events, 100% coverage, 61 days. Reserve state at each block reconstructed exactly. Price and liquidity at each swap are observed, not modeled.</p></div></div>
@@ -608,7 +627,7 @@ table{width:100%;border-collapse:collapse}.th,.td{text-align:left;padding:6px 8p
 </div>
 
 <script>
-let D=null,connected=false,LIVE_PRICE=0;
+let D=null,connected=false,LIVE_PRICE=0,DATA_VALID=false,DATA_REASON='Live inputs have not loaded.';
 
 // GitHub Pages has no always-running Python process. Its scheduled workflow
 // publishes the same read-only API responses as static JSON snapshots.
@@ -641,15 +660,38 @@ function setConn(state){
  ob.style.display=state==='offline'?'block':'none';
 }
 
+function setDataLock(valid,reason=''){
+ DATA_VALID=valid;DATA_REASON=reason||DATA_REASON;
+ document.body.classList.toggle('data-locked',!valid);
+ const ob=document.getElementById('offlineBanner');
+ if(!valid){
+  ob.textContent='DATA INVALID — NO DECISION AVAILABLE. '+DATA_REASON+' Cached plans and watch levels are historical reference only.';
+  ob.style.display='block';
+  const b=document.getElementById('decBadge');if(b){b.textContent='BLOCKED — DATA INVALID';b.className='dec dec-no';}
+  const ib=document.getElementById('ideaBadge');if(ib){ib.textContent='BLOCKED';ib.className='idea-badge no';}
+  const c=document.getElementById('conclusion');if(c)c.textContent='No current decision is available until critical market inputs pass freshness and agreement gates.';
+ }else if(connected){ob.style.display='none';}
+}
+
 async function fetchLive(){
  try{
   const r=await fetch('/api/live',{signal:AbortSignal.timeout(8000)});
   if(!r.ok)throw new Error(r.status);
   const d=await r.json();
   const ok=d.providers_ok||0;const ag=d.rpc_agreement;
-  setConn(ok>=4&&ag?'live':ok>=2?'degraded':'offline');
   const dex=d.dex||{};const obs=(d.observations||[{}])[0];
   const p=parseFloat(dex.price_usd||0);LIVE_PRICE=p;
+  const wallAge=Math.max(Number(d.age_seconds||0),Math.max(0,Date.now()/1000-Number(d.observed_at||0)));
+  const ethUsdNow=parseFloat((d.state||{}).eth_usd||0);
+  const reasons=[];
+  if(wallAge>600)reasons.push('pool snapshot older than 10 minutes');
+  if(!ag)reasons.push('RPC providers do not agree');
+  if(ok<2)reasons.push('fewer than two RPC providers responded');
+  if(!(p>0))reasons.push('DEX price unavailable');
+  if(!(ethUsdNow>0))reasons.push('ETH/USD inference unavailable');
+  const valid=reasons.length===0;
+  setConn(valid?(ok>=4?'live':'degraded'):'offline');
+  setDataLock(valid,reasons.join('; '));
   if(p>0){
    document.getElementById('dexP').textContent='$'+p.toFixed(8);
    const chg=parseFloat(dex.change_24h_pct||0);
@@ -677,8 +719,8 @@ async function fetchLive(){
   document.getElementById('ethVal').textContent=eth_usd>0?'$'+eth_usd.toFixed(0):'—';
   document.getElementById('rpcVal').textContent=ok+'/4';
   document.getElementById('rpcDetail').textContent=ag?'All block hashes match':'RPC disagreement detected';
-  document.getElementById('tsAge').textContent='Pool age: '+(d.age_seconds||0)+'s';
- }catch(e){setConn('offline');}
+  document.getElementById('tsAge').textContent='Pool age: '+Math.round(wallAge)+'s'+(wallAge>120?' · STALE WARNING':'');
+ }catch(e){setConn('offline');setDataLock(false,'market snapshot failed to load or timed out');}
 }
 
 async function fetchPlan(){
@@ -709,9 +751,11 @@ async function fetchPaper(){
 function renderPaper(p){
  const n=v=>Number(v||0),usd=v=>'$'+n(v).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
  const tok=v=>Math.round(n(v)).toLocaleString(),pct=v=>(n(v)>=0?'+':'')+n(v).toFixed(2)+'%';
- const state=p.state||'SCANNING';
+ const paperAge=p.updated_at?Math.max(0,Date.now()/1000-new Date(p.updated_at).getTime()/1000):Infinity;
+ const paperStale=paperAge>1200;
+ const state=paperStale?'BLOCKED_PAPER_STALE':(p.state||'SCANNING');
  const st=document.getElementById('agState');st.textContent=state;
- st.style.color=state==='PAUSED_BY_RISK'?'var(--red)':state==='SCANNING'?'var(--blue)':'var(--amber)';
+ st.style.color=(state==='PAUSED_BY_RISK'||state==='BLOCKED_PAPER_STALE')?'var(--red)':state==='SCANNING'?'var(--blue)':'var(--amber)';
  document.getElementById('agTokens').textContent=tok(p.tokens);
  document.getElementById('agCash').textContent=usd(p.cash_usd);
  document.getElementById('agEquity').textContent=usd(p.equity_usd);
@@ -720,13 +764,17 @@ function renderPaper(p){
  document.getElementById('agActions').textContent=(p.actions||0)+' / '+(p.completed_cycles||0);
  document.getElementById('agCosts').textContent=usd(n(p.gas_paid_usd)+n(p.fees_paid_usd));
  document.getElementById('agUpdated').textContent=p.updated_at?new Date(p.updated_at).toLocaleString():'—';
+ document.getElementById('agBlock').textContent=p.last_source_block?Number(p.last_source_block).toLocaleString():'—';
+ document.getElementById('agVersion').textContent=(p.config_hash||'—')+' / '+(p.code_commit||'—');
  const levels=(p.buyback_levels||[]).map(x=>`${x.filled?'✓':'○'} -${(n(x.drop_pct)*100).toFixed(0)}% @ $${n(x.trigger_price).toFixed(8)}`).join('<br>');
  const blockers=(p.blockers||[]).length?(p.blockers||[]).map(x=>'⚠ '+x.replaceAll('_',' ')).join('<br>'):'✓ All current risk gates clear';
- document.getElementById('agCycle').innerHTML=`<b>State:</b> ${state}<br><b>Core floor:</b> ${tok(p.core_floor_tokens)} tokens<br><b>Average sell:</b> ${n(p.average_sell_price)>0?'$'+n(p.average_sell_price).toFixed(8):'—'}<br>${levels||'<b>Buybacks:</b> none open'}<br><br>${blockers}`;
+ document.getElementById('agCycle').innerHTML=`<b>State:</b> ${state}<br><b>Paper age:</b> ${isFinite(paperAge)?Math.round(paperAge/60)+' minutes':'unavailable'}<br><b>Core floor:</b> ${tok(p.core_floor_tokens)} tokens<br><b>Average sell:</b> ${n(p.average_sell_price)>0?'$'+n(p.average_sell_price).toFixed(8):'—'}<br>${levels||'<b>Buybacks:</b> none open'}<br><br>${paperStale?'⚠ paper engine older than 20 minutes<br>':''}${blockers}`;
  const m=p.missed_opportunity||{};
  document.getElementById('missedReview').innerHTML=`<b>Session high:</b> $${n(m.session_high).toFixed(8)}<br><b>Low after high:</b> $${n(m.session_low_after_high).toFixed(8)}<br><b>Maximum retracement:</b> ${pct(m.maximum_retracement_pct)}<br><b>Pump detected:</b> ${m.pump_detected?'YES':'NO'}<br><b>Sell armed:</b> ${m.sell_signal_armed?'YES':'NO'}<br><b>Primary blocker:</b> ${(m.primary_blocker||'none').replaceAll('_',' ')}<br><b>Classification:</b> ${m.classification||'MONITORING'}`;
  const ledger=(p.ledger||[]).slice().reverse().slice(0,20);
  document.getElementById('agLedger').innerHTML=ledger.length?ledger.map(x=>`<tr><td class="td">${new Date(x.fill_time).toLocaleString()}</td><td class="td" style="color:${x.side==='SELL'?'var(--red)':'var(--mint)'}">${x.side}</td><td class="td">${tok(x.tokens)}</td><td class="td">${usd(x.cash_usd)}</td><td class="td">$${n(x.simulated_fill_price).toFixed(8)}</td><td class="td">${usd(x.gas_usd)}</td><td class="td">${n(x.price_impact_bps).toFixed(1)} bps</td><td class="td">${(x.reason||[]).join(', ')}</td></tr>`).join(''):'<tr><td class="td" colspan="8" style="color:var(--muted)">No qualified paper actions yet. The engine is observing and preserving its state.</td></tr>';
+ const evals=(p.evaluation_ledger||[]).slice().reverse().slice(0,30);
+ document.getElementById('agEvaluations').innerHTML=evals.length?evals.map(x=>`<tr><td class="td">${new Date(x.completed_at).toLocaleString()}</td><td class="td">${Number(x.source_block||0).toLocaleString()}</td><td class="td">${x.data_status}</td><td class="td">${x.signal_status}</td><td class="td">${x.risk_status}</td><td class="td">${x.decision}</td><td class="td">${(x.reason_codes||[]).join(', ')}</td></tr>`).join(''):'<tr><td class="td" colspan="7" style="color:var(--muted)">No completed evaluations published.</td></tr>';
 }
 
 function renderAll(d){
@@ -852,6 +900,7 @@ function renderAll(d){
  document.getElementById('hVerif').textContent=ms.market_verified?'PASS':'FAIL';
  document.getElementById('hVerif').style.color=ms.market_verified?'var(--mint)':'var(--red)';
  renderCmds();
+ if(!DATA_VALID)setDataLock(false,DATA_REASON);
 }
 
 function renderIdea(d){
