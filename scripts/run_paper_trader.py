@@ -155,6 +155,7 @@ def main() -> None:
     state["code_commit"] = os.getenv("GITHUB_SHA", state.get("code_commit", "local"))[:12]
     source_block = int((market.get("state") or {}).get("block_number") or observation.get("block") or 0)
     state_before_hash = hashlib.sha256(json.dumps(state, sort_keys=True).encode()).hexdigest()[:16]
+    state_before_name = state.get("state", "SCANNING")
     already_evaluated = source_block > 0 and any(int(e.get("source_block") or 0) == source_block for e in state["evaluation_ledger"])
     evaluation_decision = "ABSTAIN"
     evaluation_reasons = []
@@ -300,6 +301,13 @@ def main() -> None:
     state["ledger"] = state["ledger"][-500:]
     if not evaluation_reasons:
         evaluation_reasons = list(state.get("blockers") or []) or ["no_qualified_signal"]
+    data_blockers = {"market_snapshot_stale", "rpc_disagreement_or_fallback", "liquidity_below_minimum"}
+    if evaluation_decision == "ABSTAIN":
+        evaluation_decision = (
+            "NOT_EVALUATED_DATA_INVALID"
+            if any(reason in data_blockers for reason in blockers)
+            else "NO_TRADE_SIGNAL_WEAK"
+        )
     if not already_evaluated:
         state_after_hash = hashlib.sha256(json.dumps({k: v for k, v in state.items() if k != "evaluation_ledger"}, sort_keys=True).encode()).hexdigest()[:16]
         state["evaluation_ledger"].append({
@@ -311,6 +319,8 @@ def main() -> None:
             "signal_status": "pump" if pump_detected else "none",
             "risk_status": "blocked" if blockers else "passed",
             "decision": evaluation_decision,
+            "prior_state": state_before_name,
+            "new_state": state.get("state", "SCANNING"),
             "reason_codes": evaluation_reasons,
             "engine_version": state["version"],
             "config_hash": CONFIG_HASH,
