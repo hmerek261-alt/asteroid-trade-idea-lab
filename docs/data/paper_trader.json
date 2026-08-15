@@ -5,7 +5,7 @@
   "evaluation_interval_minutes": 5,
   "state": "SCANNING",
   "started_at": "2026-07-31T22:12:24Z",
-  "updated_at": "2026-08-15T22:41:43Z",
+  "updated_at": "2026-08-15T22:57:00Z",
   "tokens": "74683073",
   "cash_usd": "0",
   "core_floor_tokens": "37341536.50",
@@ -1822,6 +1822,11 @@
       "ts": 1786833703,
       "price": "0.00005913",
       "liquidity_usd": "1816089.44"
+    },
+    {
+      "ts": 1786834620,
+      "price": "0.00005913",
+      "liquidity_usd": "1816072.92"
     }
   ],
   "ledger": [],
@@ -1839,14 +1844,14 @@
   },
   "market": {
     "price_usd": "0.00005913",
-    "liquidity_usd": "1816089.44",
-    "gas_usd": "0.01129971346099170979528350062963765730000",
+    "liquidity_usd": "1816072.92",
+    "gas_usd": "0.01048543464387868862125898168673098640000",
     "returns": {
       "20m": "0.000507614213197969543147208121827411168",
-      "1h": "0.011287839917906618778860954335556695741",
-      "4h": "-0.0045454545454545454545454545454545454545",
-      "6h": "-0.0404089581304771178188899707887049659202",
-      "24h": "-0.0498152016712196689699501847983287803310"
+      "1h": "0.004416510956344487854594870052658399864",
+      "4h": "0.002543234994913530010172939979654120041",
+      "6h": "-0.0382238126219908913467794404684450227716",
+      "24h": "-0.0588890657329301289193060639821741206430"
     },
     "rpc_agreement": false
   },
@@ -9029,9 +9034,29 @@
       "code_commit": "1f0bbaec12a9",
       "state_before_hash": "7f97ec5f0653c1f5",
       "state_after_hash": "bca0b4eaf9ac0274"
+    },
+    {
+      "scheduled_at": null,
+      "started_at": "2026-08-15T22:57:00Z",
+      "completed_at": "2026-08-15T22:57:00Z",
+      "source_block": 25763573,
+      "data_status": "blocked",
+      "signal_status": "none",
+      "risk_status": "blocked",
+      "decision": "NOT_EVALUATED_DATA_INVALID",
+      "prior_state": "SCANNING",
+      "new_state": "SCANNING",
+      "reason_codes": [
+        "rpc_disagreement_or_fallback"
+      ],
+      "engine_version": "aggressive_pump_recycler_v1",
+      "config_hash": "a44a7cb58e01",
+      "code_commit": "0818cfb65b65",
+      "state_before_hash": "f2efb8ccc61a24c2",
+      "state_after_hash": "1175defc2fe861af"
     }
   ],
   "config_hash": "a44a7cb58e01",
-  "code_commit": "1f0bbaec12a9",
-  "last_source_block": 25763497
+  "code_commit": "0818cfb65b65",
+  "last_source_block": 25763573
 }
