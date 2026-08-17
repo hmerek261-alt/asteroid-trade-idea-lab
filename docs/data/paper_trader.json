@@ -5,7 +5,7 @@
   "evaluation_interval_minutes": 5,
   "state": "SCANNING",
   "started_at": "2026-07-31T22:12:24Z",
-  "updated_at": "2026-08-17T22:24:03Z",
+  "updated_at": "2026-08-17T22:45:27Z",
   "tokens": "74683073",
   "cash_usd": "0",
   "core_floor_tokens": "37341536.50",
@@ -2357,6 +2357,11 @@
       "ts": 1787005443,
       "price": "0.00006315",
       "liquidity_usd": "1890705.12"
+    },
+    {
+      "ts": 1787006727,
+      "price": "0.00006356",
+      "liquidity_usd": "1896125.95"
     }
   ],
   "ledger": [],
@@ -2373,20 +2378,20 @@
     "classification": "MONITORING"
   },
   "market": {
-    "price_usd": "0.00006315",
-    "liquidity_usd": "1890705.12",
-    "gas_usd": "0.01743198817877350366923308607267270720000",
+    "price_usd": "0.00006356",
+    "liquidity_usd": "1896125.95",
+    "gas_usd": "0.01363090719411764073113919784765264800000",
     "returns": {
-      "20m": "-0.0104982764023816985271074898151049827640",
-      "1h": "-0.0122008446738620366025340215861098076021",
-      "4h": "0.018712695596063881271172769801580900145",
-      "6h": "-0.0496613995485327313769751693002257336343",
-      "24h": "0.024497079818299805321219987021414665801"
+      "20m": "0.006492478226444972288202692003167062549",
+      "1h": "-0.0043859649122807017543859649122807017544",
+      "4h": "0.025326665591224391030811421196967252783",
+      "6h": "0.057218895542248835662009314703925482369",
+      "24h": "0.033495934959349593495934959349593495935"
     },
     "rpc_agreement": false
   },
-  "equity_usd": "4716.23605995",
-  "hold_equity_usd": "4716.23605995",
+  "equity_usd": "4746.85611988",
+  "hold_equity_usd": "4746.85611988",
   "vs_hold_usd": "0E-8",
   "evaluation_ledger": [
     {
@@ -11704,9 +11709,29 @@
       "code_commit": "e64fd3dd5dbf",
       "state_before_hash": "66885aea7bee469f",
       "state_after_hash": "5d5fbb1ce371e134"
+    },
+    {
+      "scheduled_at": null,
+      "started_at": "2026-08-17T22:45:27Z",
+      "completed_at": "2026-08-17T22:45:27Z",
+      "source_block": 25777877,
+      "data_status": "blocked",
+      "signal_status": "none",
+      "risk_status": "blocked",
+      "decision": "NOT_EVALUATED_DATA_INVALID",
+      "prior_state": "SCANNING",
+      "new_state": "SCANNING",
+      "reason_codes": [
+        "rpc_disagreement_or_fallback"
+      ],
+      "engine_version": "aggressive_pump_recycler_v1",
+      "config_hash": "a44a7cb58e01",
+      "code_commit": "347c9881ff69",
+      "state_before_hash": "ecc2139babefa94a",
+      "state_after_hash": "b0e8b12a2ac8f68e"
     }
   ],
   "config_hash": "a44a7cb58e01",
-  "code_commit": "e64fd3dd5dbf",
-  "last_source_block": 25777770
+  "code_commit": "347c9881ff69",
+  "last_source_block": 25777877
 }
