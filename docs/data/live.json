@@ -1,29 +1,19 @@
 {
-  "observed_at": 1787055359,
-  "age_seconds": 12,
+  "observed_at": 1787058547,
+  "age_seconds": 8,
   "rpc_agreement": false,
-  "providers_ok": 2,
+  "providers_ok": 1,
   "providers_total": 4,
   "observations": [
     {
       "provider": "publicnode",
-      "block": 25781911,
-      "block_hash": "0x2d2605f1bafc3959a8ecc4d44afa578d3298ade4cee63fea91222424dee6bef8",
-      "timestamp": 1787055347,
-      "weth_reserve": "486.939536664946883252",
-      "token_reserve": "15254855820.408684942",
-      "gas_gwei": "0.079276398",
-      "latency_ms": 101
-    },
-    {
-      "provider": "1rpc",
-      "block": 25781911,
-      "block_hash": "0x2d2605f1bafc3959a8ecc4d44afa578d3298ade4cee63fea91222424dee6bef8",
-      "timestamp": 1787055347,
-      "weth_reserve": "486.939536664946883252",
-      "token_reserve": "15254855820.408684942",
-      "gas_gwei": "0.079276398",
-      "latency_ms": 7837
+      "block": 25782176,
+      "block_hash": "0xa2c5ff9c4f6d6b7c16ea4d499761f0eb3cec45bfd99cf805d9cbc372a1b7ec7f",
+      "timestamp": 1787058539,
+      "weth_reserve": "489.633910804257692703",
+      "token_reserve": "15171869926.302495006",
+      "gas_gwei": "0.220203011",
+      "latency_ms": 385
     }
   ],
   "errors": [
@@ -34,21 +24,25 @@
     {
       "provider": "cloudflare",
       "error": "RuntimeError"
+    },
+    {
+      "provider": "1rpc",
+      "error": "HTTPError"
     }
   ],
   "state": {
-    "block_number": 25781911,
-    "timestamp": 1787055347,
-    "token_reserve": "15254855820.408684942",
-    "weth_reserve": "486.939536664946883252",
-    "eth_usd": "1901.924627439437182263928900",
+    "block_number": 25782176,
+    "timestamp": 1787058539,
+    "token_reserve": "15171869926.302495006",
+    "weth_reserve": "489.633910804257692703",
+    "eth_usd": "1898.211564143177075353330243",
     "confidence": "invalid",
     "source": "scheduled public multi-RPC getReserves + DEX Screener"
   },
   "dex": {
-    "price_usd": "0.00006071",
-    "liquidity_usd": "1852277.39",
-    "volume_24h_usd": "740805.28",
-    "change_24h_pct": "-5.82"
+    "price_usd": "0.00006126",
+    "liquidity_usd": "1858763.55",
+    "volume_24h_usd": "752556.23",
+    "change_24h_pct": "-7.68"
   }
 }
