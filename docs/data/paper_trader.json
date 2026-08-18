@@ -5,7 +5,7 @@
   "evaluation_interval_minutes": 5,
   "state": "SCANNING",
   "started_at": "2026-07-31T22:12:24Z",
-  "updated_at": "2026-08-18T20:53:26Z",
+  "updated_at": "2026-08-18T21:10:12Z",
   "tokens": "74683073",
   "cash_usd": "0",
   "core_floor_tokens": "37341536.50",
@@ -2577,6 +2577,11 @@
       "ts": 1787086406,
       "price": "0.00006171",
       "liquidity_usd": "1873352.21"
+    },
+    {
+      "ts": 1787087412,
+      "price": "0.00006171",
+      "liquidity_usd": "1873352.21"
     }
   ],
   "ledger": [],
@@ -2595,13 +2600,13 @@
   "market": {
     "price_usd": "0.00006171",
     "liquidity_usd": "1873352.21",
-    "gas_usd": "0.02769810186333703144450055744289713400000",
+    "gas_usd": "0.02811536153924036029795245131386370550000",
     "returns": {
-      "20m": "-0.0012947078815342288396180611749474024923",
-      "1h": "0.002436647173489278752436647173489278752",
+      "20m": "0",
+      "1h": "-0.0012947078815342288396180611749474024923",
       "4h": "-0.0134292565947242206235011990407673860911",
-      "6h": "0.009653141361256544502617801047120418848",
-      "24h": "-0.0221834891459356678814767865631437173190"
+      "6h": "-0.0139022051773729626078619367209971236817",
+      "24h": "-0.0275764260951780649227860069335014182162"
     },
     "rpc_agreement": false
   },
@@ -12804,9 +12809,29 @@
       "code_commit": "350dcbf56c91",
       "state_before_hash": "7bd4ce0e40cd6ee9",
       "state_after_hash": "00784b94db288a4f"
+    },
+    {
+      "scheduled_at": null,
+      "started_at": "2026-08-18T21:10:12Z",
+      "completed_at": "2026-08-18T21:10:12Z",
+      "source_block": 25784575,
+      "data_status": "blocked",
+      "signal_status": "none",
+      "risk_status": "blocked",
+      "decision": "NOT_EVALUATED_DATA_INVALID",
+      "prior_state": "SCANNING",
+      "new_state": "SCANNING",
+      "reason_codes": [
+        "rpc_disagreement_or_fallback"
+      ],
+      "engine_version": "aggressive_pump_recycler_v1",
+      "config_hash": "a44a7cb58e01",
+      "code_commit": "8f44633674b6",
+      "state_before_hash": "7228a4997330f59f",
+      "state_after_hash": "8e2af298eb3027d2"
     }
   ],
   "config_hash": "a44a7cb58e01",
-  "code_commit": "350dcbf56c91",
-  "last_source_block": 25784492
+  "code_commit": "8f44633674b6",
+  "last_source_block": 25784575
 }
