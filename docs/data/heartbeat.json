@@ -1,9 +1,9 @@
 {
   "status": "degraded",
-  "rpc_ok": 1,
+  "rpc_ok": 2,
   "rpc_agreement": false,
-  "age_seconds": 14,
-  "block": 25791298,
-  "dex_price_usd": "0.00006221",
-  "ts": 1787168365
+  "age_seconds": 11,
+  "block": 25791381,
+  "dex_price_usd": "0.00006253",
+  "ts": 1787169358
 }
