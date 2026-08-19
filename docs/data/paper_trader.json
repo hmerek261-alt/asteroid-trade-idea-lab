@@ -5,7 +5,7 @@
   "evaluation_interval_minutes": 5,
   "state": "SCANNING",
   "started_at": "2026-07-31T22:12:24Z",
-  "updated_at": "2026-08-19T06:16:42Z",
+  "updated_at": "2026-08-19T07:07:06Z",
   "tokens": "74683073",
   "cash_usd": "0",
   "core_floor_tokens": "37341536.50",
@@ -2667,6 +2667,11 @@
       "ts": 1787120202,
       "price": "0.00006080",
       "liquidity_usd": "1858434.63"
+    },
+    {
+      "ts": 1787123226,
+      "price": "0.00006198",
+      "liquidity_usd": "1879972.85"
     }
   ],
   "ledger": [],
@@ -2674,29 +2679,29 @@
     "rpc_disagreement_or_fallback"
   ],
   "missed_opportunity": {
-    "session_high": "0.00006106",
-    "session_low_after_high": "0.00006068",
-    "maximum_retracement_pct": "-0.6223386832623648869963969865705863085500",
+    "session_high": "0.00006198",
+    "session_low_after_high": "0.00006198",
+    "maximum_retracement_pct": "0",
     "pump_detected": false,
     "sell_signal_armed": false,
     "primary_blocker": "rpc_disagreement_or_fallback",
     "classification": "MONITORING"
   },
   "market": {
-    "price_usd": "0.00006080",
-    "liquidity_usd": "1858434.63",
-    "gas_usd": "0.01149062368286866428140432105561566500000",
+    "price_usd": "0.00006198",
+    "liquidity_usd": "1879972.85",
+    "gas_usd": "0.01463978102706505138036912248717344400000",
     "returns": {
-      "20m": "0.001482457585241311151375391204084994235",
-      "1h": "0.001977587343441001977587343441001977587",
-      "4h": "0.012995668110629790069976674441852715761",
-      "6h": "0.026160337552742616033755274261603375527",
-      "24h": "-0.0100944317811787691305763594920221426246"
+      "20m": "0.019407894736842105263157894736842105263",
+      "1h": "0.020919123702849612913852742546532696426",
+      "4h": "0.038538873994638069705093833780160857909",
+      "6h": "0.046075949367088607594936708860759493671",
+      "24h": "0.013738959764474975466143277723258096173"
     },
     "rpc_agreement": false
   },
-  "equity_usd": "4540.73083840",
-  "hold_equity_usd": "4540.73083840",
+  "equity_usd": "4628.85686454",
+  "hold_equity_usd": "4628.85686454",
   "vs_hold_usd": "0E-8",
   "evaluation_ledger": [
     {
@@ -13254,9 +13259,29 @@
       "code_commit": "6f7861f55bc7",
       "state_before_hash": "053721a7a2cf3846",
       "state_after_hash": "be62c2d989871955"
+    },
+    {
+      "scheduled_at": null,
+      "started_at": "2026-08-19T07:07:06Z",
+      "completed_at": "2026-08-19T07:07:06Z",
+      "source_block": 25787553,
+      "data_status": "blocked",
+      "signal_status": "none",
+      "risk_status": "blocked",
+      "decision": "NOT_EVALUATED_DATA_INVALID",
+      "prior_state": "SCANNING",
+      "new_state": "SCANNING",
+      "reason_codes": [
+        "rpc_disagreement_or_fallback"
+      ],
+      "engine_version": "aggressive_pump_recycler_v1",
+      "config_hash": "a44a7cb58e01",
+      "code_commit": "1f3d43796ded",
+      "state_before_hash": "17a8df5407288bd1",
+      "state_after_hash": "60be6e6989a5f178"
     }
   ],
   "config_hash": "a44a7cb58e01",
-  "code_commit": "6f7861f55bc7",
-  "last_source_block": 25787303
+  "code_commit": "1f3d43796ded",
+  "last_source_block": 25787553
 }
