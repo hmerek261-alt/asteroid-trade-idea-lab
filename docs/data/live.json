@@ -1,6 +1,6 @@
 {
-  "observed_at": 1788991141,
-  "age_seconds": 7838,
+  "observed_at": 1788997798,
+  "age_seconds": 14495,
   "rpc_agreement": false,
   "providers_ok": 0,
   "providers_total": 4,
@@ -53,14 +53,14 @@
     "timestamp": 1788983303,
     "token_reserve": "32880713251.415788261",
     "weth_reserve": "247.962259231782442767",
-    "eth_usd": "2463.776762254150739534691609",
+    "eth_usd": "2427.973763017949410165780590",
     "confidence": "invalid",
     "source": "scheduled public multi-RPC getReserves + DEX Screener"
   },
   "dex": {
-    "price_usd": "0.00001858",
-    "liquidity_usd": "1221166.02",
-    "volume_24h_usd": "889557.4",
-    "change_24h_pct": "-8.74"
+    "price_usd": "0.00001831",
+    "liquidity_usd": "1214248.97",
+    "volume_24h_usd": "898786.71",
+    "change_24h_pct": "-11.64"
   }
 }
