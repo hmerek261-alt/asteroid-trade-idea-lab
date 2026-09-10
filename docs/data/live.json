@@ -1,26 +1,22 @@
 {
-  "observed_at": 1789003866,
-  "age_seconds": 19,
+  "observed_at": 1789021735,
+  "age_seconds": 8,
   "rpc_agreement": false,
   "providers_ok": 1,
   "providers_total": 4,
   "observations": [
     {
-      "provider": "1rpc",
-      "block": 25943714,
-      "block_hash": "0x53593d3d8e37c030c7e4fb759b03679bf887fbcb3369907b815ce327c59029af",
-      "timestamp": 1789003847,
-      "weth_reserve": "243.943938961097066426",
-      "token_reserve": "33458029052.399948704",
-      "gas_gwei": "0.06628956",
-      "latency_ms": 3645
+      "provider": "publicnode",
+      "block": 25945200,
+      "block_hash": "0xf4b8f13bf3fa7aec7e487b23e1af8a50e35eca24cf19ef0f5f3ab1795b72c3c4",
+      "timestamp": 1789021727,
+      "weth_reserve": "238.641223366073006856",
+      "token_reserve": "34238682121.273195737",
+      "gas_gwei": "0.047491841",
+      "latency_ms": 101
     }
   ],
   "errors": [
-    {
-      "provider": "publicnode",
-      "error": "HTTPError"
-    },
     {
       "provider": "llamarpc",
       "error": "HTTPError"
@@ -28,21 +24,25 @@
     {
       "provider": "cloudflare",
       "error": "RuntimeError"
+    },
+    {
+      "provider": "1rpc",
+      "error": "HTTPError"
     }
   ],
   "state": {
-    "block_number": 25943714,
-    "timestamp": 1789003847,
-    "token_reserve": "33458029052.399948704",
-    "weth_reserve": "243.943938961097066426",
-    "eth_usd": "2467.410935545582876360174729",
+    "block_number": 25945200,
+    "timestamp": 1789021727,
+    "token_reserve": "34238682121.273195737",
+    "weth_reserve": "238.641223366073006856",
+    "eth_usd": "2462.004581244434113956593583",
     "confidence": "invalid",
     "source": "scheduled public multi-RPC getReserves + DEX Screener"
   },
   "dex": {
-    "price_usd": "0.00001799",
-    "liquidity_usd": "1203944.69",
-    "volume_24h_usd": "944967.22",
-    "change_24h_pct": "-16.83"
+    "price_usd": "0.00001716",
+    "liquidity_usd": "1177805.93",
+    "volume_24h_usd": "889159.06",
+    "change_24h_pct": "-18.44"
   }
 }
