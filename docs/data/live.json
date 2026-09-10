@@ -1,26 +1,22 @@
 {
-  "observed_at": 1789040384,
-  "age_seconds": 18657,
+  "observed_at": 1789052896,
+  "age_seconds": 5,
   "rpc_agreement": false,
-  "providers_ok": 0,
+  "providers_ok": 1,
   "providers_total": 4,
   "observations": [
     {
       "provider": "publicnode",
-      "block": 25945200,
-      "block_hash": "0xf4b8f13bf3fa7aec7e487b23e1af8a50e35eca24cf19ef0f5f3ab1795b72c3c4",
-      "timestamp": 1789021727,
-      "weth_reserve": "238.641223366073006856",
-      "token_reserve": "34238682121.273195737",
-      "gas_gwei": "0.047491841",
-      "latency_ms": 101
+      "block": 25947784,
+      "block_hash": "0x2b3b9257550932cdee6578a2e74ea0e1b5a57da7d66f2b45686239c49631138e",
+      "timestamp": 1789052891,
+      "weth_reserve": "235.635582739626784443",
+      "token_reserve": "34683153359.627794556",
+      "gas_gwei": "0.272669043",
+      "latency_ms": 442
     }
   ],
   "errors": [
-    {
-      "provider": "publicnode",
-      "error": "HTTPError"
-    },
     {
       "provider": "llamarpc",
       "error": "HTTPError"
@@ -32,25 +28,21 @@
     {
       "provider": "1rpc",
       "error": "HTTPError"
-    },
-    {
-      "provider": "all",
-      "error": "using last verified reserve snapshot"
     }
   ],
   "state": {
-    "block_number": 25945200,
-    "timestamp": 1789021727,
-    "token_reserve": "34238682121.273195737",
-    "weth_reserve": "238.641223366073006856",
-    "eth_usd": "2420.397277715244959350101034",
+    "block_number": 25947784,
+    "timestamp": 1789052891,
+    "token_reserve": "34683153359.627794556",
+    "weth_reserve": "235.635582739626784443",
+    "eth_usd": "2440.406818090990121097533296",
     "confidence": "invalid",
     "source": "scheduled public multi-RPC getReserves + DEX Screener"
   },
   "dex": {
-    "price_usd": "0.00001687",
-    "liquidity_usd": "1167426.83",
-    "volume_24h_usd": "915284.29",
-    "change_24h_pct": "-23.01"
+    "price_usd": "0.00001658",
+    "liquidity_usd": "1150428.5",
+    "volume_24h_usd": "875098.19",
+    "change_24h_pct": "-21.79"
   }
 }
