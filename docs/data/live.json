@@ -1,19 +1,19 @@
 {
-  "observed_at": 1790781555,
-  "age_seconds": 4,
+  "observed_at": 1790798762,
+  "age_seconds": 15,
   "rpc_agreement": false,
   "providers_ok": 1,
   "providers_total": 4,
   "observations": [
     {
       "provider": "publicnode",
-      "block": 26091146,
-      "block_hash": "0x75959402b234e38d24e19cc0a2ec84c580fceda13c676b5eae0363a6754e265e",
-      "timestamp": 1790781551,
-      "weth_reserve": "203.14491060972701982",
-      "token_reserve": "41241475663.843953209",
-      "gas_gwei": "1.08254985",
-      "latency_ms": 509
+      "block": 26092572,
+      "block_hash": "0x7edb82d69fe2c018376bc6404ac94b278578e0f42af90fc2c7a217f23bfe23c5",
+      "timestamp": 1790798747,
+      "weth_reserve": "203.168508871253093181",
+      "token_reserve": "41240657829.721160198",
+      "gas_gwei": "0.499309105",
+      "latency_ms": 258
     }
   ],
   "errors": [
@@ -31,18 +31,18 @@
     }
   ],
   "state": {
-    "block_number": 26091146,
-    "timestamp": 1790781551,
-    "token_reserve": "41241475663.843953209",
-    "weth_reserve": "203.14491060972701982",
-    "eth_usd": "2679.798756113527398133460169",
+    "block_number": 26092572,
+    "timestamp": 1790798747,
+    "token_reserve": "41240657829.721160198",
+    "weth_reserve": "203.168508871253093181",
+    "eth_usd": "2669.284986505932580500135355",
     "confidence": "invalid",
     "source": "scheduled public multi-RPC getReserves + DEX Screener"
   },
   "dex": {
-    "price_usd": "0.00001320",
-    "liquidity_usd": "1089560.76",
-    "volume_24h_usd": "279894.42",
-    "change_24h_pct": "8.05"
+    "price_usd": "0.00001315",
+    "liquidity_usd": "1084814.98",
+    "volume_24h_usd": "276087.91",
+    "change_24h_pct": "9.59"
   }
 }
