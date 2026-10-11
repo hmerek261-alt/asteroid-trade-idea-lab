@@ -5,7 +5,7 @@
   "evaluation_interval_minutes": 5,
   "state": "SCANNING",
   "started_at": "2026-07-31T22:12:24Z",
-  "updated_at": "2026-10-10T21:02:27Z",
+  "updated_at": "2026-10-11T00:11:22Z",
   "tokens": "74683073",
   "cash_usd": "0",
   "core_floor_tokens": "37341536.50",
@@ -18,7 +18,7 @@
   "completed_cycles": 0,
   "extra_tokens": "0",
   "last_action_at": 0,
-  "day": "2026-10-10",
+  "day": "2026-10-11",
   "actions_today": 0,
   "cycles_today": 0,
   "armed_peak_price": "0",
@@ -5767,6 +5767,11 @@
       "ts": 1791666147,
       "price": "0.00001146",
       "liquidity_usd": "985128.62"
+    },
+    {
+      "ts": 1791677482,
+      "price": "0.00001155",
+      "liquidity_usd": "988600.13"
     }
   ],
   "ledger": [],
@@ -5774,51 +5779,31 @@
     "rpc_disagreement_or_fallback"
   ],
   "missed_opportunity": {
-    "session_high": "0.00001166",
-    "session_low_after_high": "0.00001140",
-    "maximum_retracement_pct": "-2.229845626072041166380789022298456260720",
+    "session_high": "0.00001155",
+    "session_low_after_high": "0.00001155",
+    "maximum_retracement_pct": "0",
     "pump_detected": false,
     "sell_signal_armed": false,
     "primary_blocker": "rpc_disagreement_or_fallback",
     "classification": "MONITORING"
   },
   "market": {
-    "price_usd": "0.00001146",
-    "liquidity_usd": "985128.62",
-    "gas_usd": "0.02375350147143019588065904980214512855000",
+    "price_usd": "0.00001155",
+    "liquidity_usd": "988600.13",
+    "gas_usd": "0.02450235881804436932453054525747270880000",
     "returns": {
-      "20m": "0.005263157894736842105263157894736842105",
-      "1h": "0.005263157894736842105263157894736842105",
-      "4h": "0",
-      "6h": "0",
-      "24h": "-0.0017421602787456445993031358885017421603"
+      "20m": "0.007853403141361256544502617801047120419",
+      "1h": "0.007853403141361256544502617801047120419",
+      "4h": "0.013157894736842105263157894736842105263",
+      "6h": "0.013157894736842105263157894736842105263",
+      "24h": "-0.0244932432432432432432432432432432432432"
     },
     "rpc_agreement": false
   },
-  "equity_usd": "855.86801658",
-  "hold_equity_usd": "855.86801658",
+  "equity_usd": "862.58949315",
+  "hold_equity_usd": "862.58949315",
   "vs_hold_usd": "0E-8",
   "evaluation_ledger": [
-    {
-      "scheduled_at": null,
-      "started_at": "2026-08-09T02:37:15Z",
-      "completed_at": "2026-08-09T02:37:15Z",
-      "source_block": 25714474,
-      "data_status": "blocked",
-      "signal_status": "none",
-      "risk_status": "blocked",
-      "decision": "NOT_EVALUATED_DATA_INVALID",
-      "prior_state": "SCANNING",
-      "new_state": "SCANNING",
-      "reason_codes": [
-        "rpc_disagreement_or_fallback"
-      ],
-      "engine_version": "aggressive_pump_recycler_v1",
-      "config_hash": "a44a7cb58e01",
-      "code_commit": "b4da283423c9",
-      "state_before_hash": "c7f25dc062b41ea6",
-      "state_after_hash": "193f231c99250699"
-    },
     {
       "scheduled_at": null,
       "started_at": "2026-08-09T04:02:46Z",
@@ -25803,9 +25788,29 @@
       "code_commit": "4efc5e095f24",
       "state_before_hash": "d6743611b73eaf66",
       "state_after_hash": "41ab1d7097f8083c"
+    },
+    {
+      "scheduled_at": null,
+      "started_at": "2026-10-11T00:11:22Z",
+      "completed_at": "2026-10-11T00:11:22Z",
+      "source_block": 26165536,
+      "data_status": "blocked",
+      "signal_status": "none",
+      "risk_status": "blocked",
+      "decision": "NOT_EVALUATED_DATA_INVALID",
+      "prior_state": "SCANNING",
+      "new_state": "SCANNING",
+      "reason_codes": [
+        "rpc_disagreement_or_fallback"
+      ],
+      "engine_version": "aggressive_pump_recycler_v1",
+      "config_hash": "a44a7cb58e01",
+      "code_commit": "31c2a7f71ebe",
+      "state_before_hash": "ec8367644d65bd27",
+      "state_after_hash": "d905c468673c92b8"
     }
   ],
   "config_hash": "a44a7cb58e01",
-  "code_commit": "4efc5e095f24",
-  "last_source_block": 26164593
+  "code_commit": "31c2a7f71ebe",
+  "last_source_block": 26165536
 }
