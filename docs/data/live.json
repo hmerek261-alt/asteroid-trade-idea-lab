@@ -1,8 +1,8 @@
 {
-  "observed_at": 1795318396,
-  "age_seconds": 5,
+  "observed_at": 1795348451,
+  "age_seconds": 30060,
   "rpc_agreement": false,
-  "providers_ok": 1,
+  "providers_ok": 0,
   "providers_total": 4,
   "observations": [
     {
@@ -18,6 +18,10 @@
   ],
   "errors": [
     {
+      "provider": "publicnode",
+      "error": "TypeError"
+    },
+    {
       "provider": "llamarpc",
       "error": "HTTPError"
     },
@@ -28,6 +32,10 @@
     {
       "provider": "1rpc",
       "error": "HTTPError"
+    },
+    {
+      "provider": "all",
+      "error": "using last verified reserve snapshot"
     }
   ],
   "state": {
@@ -35,14 +43,14 @@
     "timestamp": 1795318391,
     "token_reserve": "43105622270.1809378",
     "weth_reserve": "183.772142730351977215",
-    "eth_usd": "1664.907979675044880674568936",
+    "eth_usd": "1688.129435012862497353461909",
     "confidence": "invalid",
     "source": "scheduled public multi-RPC getReserves + DEX Screener"
   },
   "dex": {
-    "price_usd": "0.000007098",
-    "liquidity_usd": "611998.15",
-    "volume_24h_usd": "12247",
-    "change_24h_pct": "5.78"
+    "price_usd": "0.000007197",
+    "liquidity_usd": "624198.53",
+    "volume_24h_usd": "9052.87",
+    "change_24h_pct": "2.19"
   }
 }
